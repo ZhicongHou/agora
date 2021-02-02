@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>微信支付</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/qrcode.min.js"></script>
+</head>
+
+<body>
+<h2  style="margin-left:130px;" th:text="${price}"></h2>
+<div id="qrcode" style="width:200px; height:100px; margin:50px;"></div>
+</body>
+
+<script type="text/javascript" th:inline="javascript">
+    var qrcode = new QRCode(document.getElementById("qrcode"), {
+        width: 200,
+        height: 200
+    });
+
+    function makeCode() {
+        var code_url = [[${code_url}]];
+        qrcode.makeCode(code_url);
+    }
+
+    makeCode();
+</script>
+
+
+<script type="text/javascript" th:inline="javascript">
+    $(document).ready(function () {
+        var timer=setInterval(function () {
+            $.ajax({
+                type: "GET",
+                url: "checkPaid",
+                data: {"out_trade_no": [[${out_trade_no}]]},
+                dataType: "text",
+                success: function (data) {
+                    if (data == "1") {
+                        alert("支付成功");
+                        window.location.href = "https://www.baidu.com";
+                    } else if (data == "2") {
+                        alert("支付失败");
+                        window.location.href = "https://www.baidu.com";
+                    }
+                }
+            });
+        }, 3000);
+    });
+</script>
+</html>

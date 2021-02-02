@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>room</title>
+    <script src="/js/jquery/jquery.min.js"></script>
+    <script src="/layui/layui.js"></script>
+    <link rel="stylesheet" href="/css/room.css">
+    <link rel="stylesheet" href="/layui/css/layui.css">
+</head>
+<body>
+<div class="nav"></div>
+<script>
+    $(".nav").load("/component/navigationBar");
+</script>
+<div class="layui-main mainBody">
+    <div class="screenWith layui-inline" >
+        <div class="courseInfo">
+            <span class="courseName" th:text="${section.title}">课程名称</span>
+            <span class="teacherName" th:text="${section.teaName}">任课老师</span>
+            <div class="btns layui-inline">
+                <button class="layui-btn layui-btn-danger layui-btn-radius forbid">禁 播</button>
+                <img id="record" class="recordBtn" src="/img/record-red.png" alt="record">
+                <img id="pause" class="recordBtn" src="/img/pause.png" alt="pause">
+                <img id="stop" class="recordBtn" src="/img/stop.png" alt="stop">
+                <a id="downloadLink" download="mediarecorder.webm" name="mediarecorder.webm"><img id="download" class="recordBtn" src="/img/download-black.png" alt="download"></a>
+                <a class="handa" href="javascript:;"><img class="hand" src="/img/hand2.png" alt=""></a>
+            </div>
+        </div>
+        <div class="screen" id="teacherScreen"></div>
+        <img class="fullScreen" src="/img/fullscreen2.png" alt="fullScreen" onclick="showFull('teacherScreen')">
+    </div>
+
+    <div class="layui-tab layui-tab-brief roomTab layui-inline">
+        <ul class="layui-tab-title">
+            <li class="layui-this">讨论区</li>
+            <li onclick="getAnnouncement()">公告栏</li>
+            <li onclick="refreshFileList()">文件库(100M)</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show ">
+                <div class="msgShow">
+                    <div class="layui-text msgItem" id="discussion"></div>
+                </div>
+                <form class="layui-form">
+                    <div class="layui-form-item layui-form-text">
+                        <textarea name="desc" id="desc" disabled="disabled" placeholder="初始化中，请稍后输入内容" onkeyup="value=value.replace(/<(.[^>]*)>/g, '')"  class="layui-textarea  msgText" style="resize: none" ></textarea>
+                    </div>
+                    <div class="layui-form-item sendBtn">
+                        <buttun id="sendMessage" class="layui-form-item layui-btn layui-btn-disabled msgSend" disabled="disabled">发送</buttun>
+                    </div>
+                </form>
+            </div>
+            <div class="layui-tab-item">
+                <div class="noticeShow">
+                    <div class="noticeItem" id="announcementId" >
+                        <p class="layui-text" >
+                            这是一条公告
+                        </p>
+                        <p class="noticeOperation">
+                            <span class="layui-text noticeTime" >0000-00-00 00:00:00</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-tab-item">
+                <div class="download">
+                    <div id="fileList"  class="downloadItem">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use('element', function () {
+        var element = layui.element;
+        $(".layui-nav-bar").hide();//将导航栏下面的滑块隐藏
+    })
+</script>
+<script src="/js/agora/AgoraSig.js"></script>
+<script src="/js/agora/AgoraRTCSDK-2.5.0.js"></script>
+<script src="/js/room/fullScreen.js"></script>
+<script src="/js/room/recording.js"></script>
+<script src="/js/room/studentAgora.js"></script>
+<script src="/js/room/studentRoom.js"></script>
+<script src="/js/room/studentSignal.js"></script>
+<script th:inline="javascript">
+    studentRoomInit([[${section.secId}]],[[${appId}]],[[${session.user.userName}]],[[${section.roomNumber}]]);
+</script>
+</body>
+</html>

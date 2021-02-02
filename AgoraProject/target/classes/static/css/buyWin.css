@@ -1,0 +1,23 @@
+.buyWinBody{
+    padding: 20px 20px;
+}
+.price{
+    color: orangered;
+    font-size: 30px;
+}
+
+.img{
+    height: 50px;
+    width: auto;
+}
+
+.imgBox{
+    width: 250px;
+    padding: 5px;
+    margin: 20px auto;
+    /*box-shadow: darkgrey 0 0 30px 1px;*/
+    border-radius: 5px;
+    border: 2px solid gray;
+    text-align: center;
+}
+

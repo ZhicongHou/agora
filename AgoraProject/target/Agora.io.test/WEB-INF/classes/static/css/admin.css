@@ -1,0 +1,61 @@
+.user{
+    display: none;
+}
+
+.auth{
+    display: none;
+}
+
+.msg{
+    display: none;
+}
+
+.layui-table{
+    /*word-break:break-all;*/
+    table-layout: fixed;
+}
+td{
+    white-space: nowrap;/*控制单行显示*/
+    overflow: hidden;/*超出隐藏*/
+    text-overflow: ellipsis;/*隐藏的字符用省略号表示*/
+}
+.table{
+    width: 100%;
+    display: none;
+}
+.page{
+    text-align:center;
+}
+
+.sendBody{
+    display: none;
+    box-sizing: border-box;
+    margin: 0 auto 0;
+    padding: 40px;
+    width: 1000px;
+    height: 330px;
+    border-radius: 3px;
+}
+
+.title{
+    font-size: 30px;
+}
+
+.inputBlock{
+    width: 500px;
+}
+
+.sendBtn{
+    float: right;
+    width: 150px;
+}
+
+.historyBody{
+    display: none;
+    box-sizing: border-box;
+    margin: 0 auto 0;
+    padding: 40px;
+    width: 1000px;
+    height: 330px;
+    border-radius: 3px;
+}

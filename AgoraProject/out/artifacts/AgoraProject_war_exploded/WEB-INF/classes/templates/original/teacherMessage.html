@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Agora Web Sample</title>
+    <link rel="stylesheet" href="vendor/bootstrap.min.css">
+    <script src="AgoraRTCSDK-2.5.0.js"></script>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <!--<script src="vendor/jquery.js"></script>-->
+
+</head>
+<body>
+已授权课程：
+<ul id="sectionList">
+</ul>
+未授权课程：
+<ul id="waitList">
+</ul>
+<script>
+    var url = window.location.href;
+    url = url.split("?")[1];
+    var arr = url.split("=");
+    var id = arr[1];
+    $.ajax({
+        type: "get",
+        async : false,
+        url:"getTeacherSections",
+        data:  {id:id},
+        datatype:"json",
+        success: function (data) {
+            for (var i = 0; i<data.length; i++){
+                if(data[i].authorized){
+                    var text = "<li id='section"+data[i].secId+"'> title:"+data[i].title+",  price:"+data[i].price+"</li>";
+                    $("#sectionList").append(text);
+                }else{
+                    var text = "<li id='section"+data[i].secId+"'> title:"+data[i].title+",  price:"+data[i].price+
+                        "<button onclick=\"authorize("+data[i].secId+")\">授权</button></li>";
+                    $("#waitList").append(text);
+                }
+            }
+        }
+    });
+
+
+    function authorize(secId) {
+        window.location.href = "authorizeSection?secId="+secId;
+    }
+</script>
+</body>
+</html>

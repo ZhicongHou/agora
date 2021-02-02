@@ -1,0 +1,38 @@
+.givCourseBody{
+    box-sizing: border-box;
+    margin: 0 auto 0;
+    padding: 40px;
+    width: 1000px;
+    height: 330px;
+    /*background-color:white;*/
+    /*box-shadow: darkgrey 0 0 30px 5px;*/
+    border-radius: 3px;
+}
+
+.inputBlock{
+    width: 330px;
+}
+
+.whichDayBlock{
+    width: 100px;
+}
+
+.whenBlock{
+    width: 80px;
+}
+
+.title{
+    font-size: 30px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0;
+}
+
+.img{
+    margin-bottom: 5px;
+    height: 200px;
+    width: auto;
+}

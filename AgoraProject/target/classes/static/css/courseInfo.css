@@ -1,0 +1,50 @@
+.cover{
+    height: 100%;
+    width: auto;
+    vertical-align: top!important;
+}
+
+.coverContainer{
+    background-color: #110f25;
+    text-align: center;
+    height: 281px;
+    width: 100%;
+}
+
+.infoBody{
+    margin-top: 50px!important;
+}
+
+.courseName{
+    font-size: 30px;
+}
+
+.info{
+    width: 630px;
+    position: relative;
+    left: 10px;
+    vertical-align: top!important;
+}
+
+.teacherName{
+
+}
+
+.introduction{
+    word-wrap: break-word;
+}
+
+.price{
+    color: orangered;
+    font-size: 25px;
+}
+.studentAndHour{
+    margin-top: 20px;
+    margin-bottom: 10px;
+    width: 500px;
+}
+
+.icon{
+    height: 25px;
+    width: auto;
+}

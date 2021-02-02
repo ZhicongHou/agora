@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <script src="/js/jquery/jquery.min.js"></script>
+    <script src="/layui/layui.js"></script>
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <link rel="stylesheet" href="/css/admin3.css">
+    <title>teacherInfoToAdmin</title>
+</head>
+<body>
+<div class="mainBody">
+    <div class="title">老师个人信息</div>
+    <hr>
+    <div class="layui-text">
+        <div class="item">
+            <div class="label layui-inline">用户名 : </div>
+            <a th:href="@{'/admin/getUserInfo?userName='+${user.userName}}"><span class="userName" th:text="${user.userName}"></span></a>
+        </div>
+        <div class="item">
+            <div class="label layui-inline">真实姓名 : </div>
+            <span class="realName" th:text="${user.realName}"></span>
+            <span class="realName" th:if="${user.realName}==''">未填</span>
+        </div>
+        <div class="item">
+            <div class="label layui-inline">性别 : </div>
+            <span class="sex" th:text="${user.sex}"></span>
+            <span class="sex" th:if="${user.sex}==''">未填</span>
+        </div>
+        <div class="item">
+            <div class="label layui-inline">身份证号 : </div>
+            <span th:text="${teaAuten.IDNumber}">123456789012345</span>
+        </div>
+        <div class="item">
+            <div class="label layui-inline">身份证正面照 : </div>
+            <div class="layui-inline">
+                <img class="img" th:src="${front}" alt="">
+            </div>
+        </div>
+        <div class="item">
+            <div class="label layui-inline">身份证反面照 : </div>
+            <div class="layui-inline">
+                <img class="img" th:src="${back}" alt="">
+            </div>
+        </div>
+        <div class="item">
+            <div class="label layui-inline">老师个人照 : </div>
+            <div class="layui-inline">
+                <img class="img" th:src="${person}" alt="">
+            </div>
+        </div>
+        <div class="item">
+            <div class="label layui-inline">邮箱 : </div>
+            <span class="email" th:text="${user.email}"></span>
+        </div>
+        <div class="item">
+            <div class="label layui-inline">支付宝 : </div>
+            <span class="alipay" th:text="${teaAuten.alipayAccount}"></span>
+        </div>
+        <div class="item">
+            <div class="label layui-inline">手机号 : </div>
+            <span class="phoneNumber" th:text="${teaAuten.phoneNumber}"></span>
+        </div>
+        <div class="item">
+            <div class="label layui-inline">创建时间 : </div>
+            <span class="createTime" th:text="${user.createTime}"></span>
+        </div>
+        <div class="item">
+            <div class="label layui-inline">老师简介 : </div>
+            <div class="resume layui-inline" th:text="${teaAuten.resume}"></div>
+        </div>
+        <div class="item">
+            <div class="label layui-inline" style="vertical-align: top">已开课课程 : </div>
+            <div class="layui-inline">
+                <table width="" class="layui-table" style="text-align:center; margin-top: -5px">
+                    <colgroup>
+                        <col width="150px">
+                        <col width="150px">
+                        <col width="150px">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th style="text-align:center;">课程名</th>
+                        <th style="text-align:center;">任课老师</th>
+                        <th style="text-align:center;">价格（元）</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="section:${sections}">
+                        <td><a th:href="@{'/admin/getSectionInfo?secId='+${section.secId}}" th:text="${section.title}"></a></td>
+                        <td th:text="${section.teaName}"></td>
+                        <td th:text="${section.price}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="bottom" style="height: 300px"></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html > 
+<html> 
+    <head> 
+    	<meta name="viewport" charset="utf-8" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <title>登录成功</title> 
+        <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="css/basestyle.css" />
+    </head> 
+     <script>
+        setTimeout("alert('登录成功!')", 200 );
+        (function (doc, win) {
+            var docEl = doc.documentElement,
+            resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+            recalc = function () {
+                var clientWidth = docEl.clientWidth;
+                if (!clientWidth) return;
+                if(clientWidth>=640){
+                    docEl.style.fontSize = '100px';
+                }else{
+                    docEl.style.fontSize = 100 * (clientWidth / 640) + 'px';
+                }
+            };
+            if (!doc.addEventListener) return;
+            win.addEventListener(resizeEvt, recalc, false);
+            doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script> 
+
+    <body leftmargin="0">
+        <div class="box">
+            <div class="header" style="opacity:0.8;">
+                <a class="header-logo" href="#"></a>
+                <div class="srd" id="navGlobal" style="position:right">
+                    <ul>
+                        <li class="login"><a href="Chinese.html">退出</a></li>
+                    </ul>
+                </div>
+            </div>
+
+        	<div class="background">  
+        		<img src="img/walle3.jpg" height="100%" width="100%" max-width="100%"/>  
+    		</div>
+        </div>
+    </body>
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/vcode.js"></script>
+    <script src="js/index.js"></script>
+</html>

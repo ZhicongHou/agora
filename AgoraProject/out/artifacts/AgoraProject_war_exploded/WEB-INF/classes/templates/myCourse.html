@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>myStudy</title>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/layui/layui.js"></script>
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <link rel="stylesheet" href="/css/myCourse.css">
+</head>
+<body>
+<div class="nav"></div>
+<script>
+    $(".nav").load("/component/navigationBar");
+</script>
+<div class="layui-main myCourseBody">
+    <div class="purchased">
+        <div class="coursesTitle layui-inline">已购课程</div>
+        <!--<button class="layui-btn test1">调试用</button>-->
+        <!--<button class="layui-btn test2">调试用</button>-->
+        <hr>
+        <div class="purchasedClasses" id="purchasedClasses" th:fragment="purchasedClasses">
+            <div class="display2 layui-inline" th:each="task:${tasks}">
+                <a th:href="@{'/getSection?secId='+${task.secId}}">
+                    <div class="cover" style="background-color: white">封面</div>
+                </a>
+                <div class="title">
+                    <a th:href="@{'/getSection?secId='+${task.secId}}">
+                        <div class="courseName" th:text="${task.title}">课程名称</div>
+                    </a><br>
+                    <p class="courseInfo">
+                        <span class="teacherName" th:text="${task.teaName}">任课老师</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="page" id="purchasedPage"></div>
+    </div>
+
+    <div class="myClass">
+        <div class="coursesTitle layui-inline">我开的课程</div>
+        <!--<button class="layui-btn test">调试用</button>-->
+        <hr>
+        <div class="myClasses" id="myClass" th:fragment="myClass">
+            <div class="display3 layui-inline" th:each="section:${sections}">
+                <a th:href="@{'/getSection?secId='+${section.secId}}">
+                    <div class="cover" style="background-color: white">封面</div>
+                </a>
+                <div class="title">
+                    <a th:href="@{'/getSection?secId='+${section.secId}}">
+                        <div class="courseName" th:text="${section.title}">课程名称</div>
+                    </a><br>
+                    <p class="courseInfo">
+                        <span class="teacherName" th:text="${section.teaName}">任课老师</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page" id="myClassPage"></div>
+
+
+    <div class="myApply">
+        <div class="coursesTitle layui-inline">待审核课程</div>
+        <!--<button class="layui-btn test">调试用</button>-->
+        <hr>
+        <div class="myApplys" id="myApply" th:fragment="myApply">
+            <div class="display3 layui-inline" th:if="${appliedSection}!=null">
+                <a th:href="@{'/giveCourse?secId='+${appliedSection.secId}}">
+                    <div class="cover" style="background-color: white">封面</div>
+                </a>
+                <div class="title">
+                    <a th:href="@{'/giveCourse?secId='+${appliedSection.secId}}">
+                        <div class="courseName" th:text="${appliedSection.title}">课程名称</div>
+                    </a><br>
+                    <p class="courseInfo">
+                        <span class="teacherName" th:text="${appliedSection.teaName}">任课老师</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page" id="myApplyPage"></div>
+</div>
+
+</body>
+<script th:inline="javascript">
+    layui.use('element', function () {
+        var element = layui.element;
+    });
+    layui.use('laypage',function () {
+        var laypage = layui.laypage;
+        //分页器的绑定
+        laypage.render({
+            elem: 'purchasedPage'//id
+            , limit: 8 //一页最多的个数
+            , count: [[${tasks.getTotalElements()}]]//总数，从后台获取
+            , jump: function (page, first) {//这个方法在点击分页按钮的时候触发
+                $('#purchasedClasses').load('/getOtherTaskOfPage?pageNum='+page.curr);
+            }
+        });
+
+        laypage.render({
+            elem: 'myClassPage'
+            , limit: 8
+            , count: [[${sections.getTotalElements()}]]//总数，从后台获取
+            , jump: function (page, first) {//这个方法在点击分页按钮的时候触发
+                $('#myClass').load('/getOtherSectionOfPage?pageNum='+page.curr);
+            }
+        });
+
+        laypage.render({
+            elem: 'myApplyPage'
+            , limit: 8
+            , count:1//总数，从后台获取
+            , jump: function (page, first) {//这个方法在点击分页按钮的时候触发
+                // $('#myClass').load('/getOtherSectionOfPage?pageNum='+page.curr);
+            }
+        });
+
+
+    });
+</script>
+</html>

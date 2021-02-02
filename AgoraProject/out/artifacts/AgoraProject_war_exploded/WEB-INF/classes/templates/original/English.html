@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta name="viewport" charset="utf-8" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title>Login</title>
+		<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/basestyle.css" />
+		<script>
+			(function (doc, win) {
+        		var docEl = doc.documentElement,
+	            resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+	            recalc = function () {
+	                var clientWidth = docEl.clientWidth;
+	                if (!clientWidth) return;
+	                if(clientWidth>=640){
+	                    docEl.style.fontSize = '100px';
+	                }else{
+	                    docEl.style.fontSize = 100 * (clientWidth / 640) + 'px';
+	                }
+	            };
+
+	       		 if (!doc.addEventListener) return;
+	        	win.addEventListener(resizeEvt, recalc, false);
+	        	doc.addEventListener('DOMContentLoaded', recalc, false);
+    		})(document, window);
+
+			function clearform(){
+				document.getElementById("en-form").reset();
+			}
+		</script>
+	</head>
+	<body leftmargin="0">
+
+		<div class="box">
+
+			<div class="background">  
+				<img src="img/walle1.jpg" height="100%" width="100%"/>
+			</div> 
+
+			<div class="header" style="opacity:0.8;">
+				<a class="header-logo" href="#">Login</a>
+				<div class="header-link">
+					<a href="Chinese.html" target="_top">
+						简体中文
+					</a>
+					&nbsp;|&nbsp;
+					<a href="javascript:return false;" style="opacity:0.6;">English</a>
+				</div>
+			</div>
+			<div class="content">
+				<div class="container">
+					<div class="login-wrap">
+						<div class="login-pattern">
+						 	<ul>
+						 		<li class="selected">Login</li>
+						 	</ul>
+						</div>
+						<div id="login-tab">
+							<div class="login-message login-default" id="login-message">
+							 	<form id="login-form" action="login" method="post"> 
+							 	    <div class="form-group col-lg-12 has-feedback">
+							 	    	<label for="login-username" class="sr-only">Username</label>
+							 	    	<input type="text" class="form-control" name="userName" id="login-username" placeholder="Mobile/E-Mail" autofocus="autofocus" required="required" />
+							 	    	<span class="delUsername" id="delBtn">&times;</span>
+							 	    </div>
+							 		<div class="form-group col-lg-12">
+							 			<label for="login-password" class="sr-only">Password</label>
+							 	    	<input type="password" class="form-control" name="password" id="login-password" placeholder="Password" style="ime-mode: inactive;" required="required" />
+							 	   </div>
+
+							 	   <div class="form-group col-lg-12">
+								 		<label for="vcode" class="sr-only">Verification Code</label>
+								 	    <input type="text" class="form-control" name="vcode" id="vcode" placeholder="Verification Code" autofocus="autofocus" required="required" />
+								 	    <a href="javascript:void(0);" title="Next Code">
+								 	    	<img id="code" src="index/getVerifyImage" alt="Next code" onclick="this.src = this.src + '?' + new Date().getTime();" />
+								 		</a>
+								   </div>
+
+							 	    <div class="form-group col-lg-12">
+							 		    <button type="submit" class="btn btn-primary btn-block" id="login-btn" style="opacity:0.8;">Sign In</button>
+									    <button type="button" class="btn btn-default btn-block" data-toggle = "modal" data-target="#registry" style="opacity:0.8;">Sign Up</button>
+							 	    </div>
+							 	</form>
+							 	<div class="login-help">
+							 		<a href="javascript:return false;">Forgot password?</a>
+							 		&nbsp;|&nbsp;
+									<a href="javascript:return false;">Feedback</a>
+							 	</div>
+							 </div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="footer">
+				<a href="#">About Us</a>
+				&nbsp;|&nbsp;
+				<a href="#">Terms of Service</a>
+				&nbsp;|&nbsp;
+				<a href="#"> Contact Us</a>
+				&nbsp;|&nbsp;
+				<a href="#">Help Center</a>
+				&nbsp;|&nbsp;
+				<span class="badging">&copy;1997 - ？PigPig Yu. All Rights Reserved.</span>
+			</div>
+		</div>
+		
+		<div class="modal fade" id="registry" tabindex="-1" role="dialog" aria-labelledby="ModalLabel">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span  aria-hidden="true" style="font-size: 25px;" onclick="clearform()">&times;</span>
+						</button>
+						<h2 class="modal-title" id="ModalLabel" style="text-align: center;">Sign Up</h2>
+					</div>
+					<div class="modal-body">
+						<div class="container">
+							<form class="form-horizontal" id="en-form" action="save" method="post">
+								<div class="form-group">
+							 		<label for="en-email" class="col-lg-1 col-md-2 col-sm-2 control-label">Email:</label>
+							 	    <div class="col-lg-4 col-md-5 col-sm-7">
+							 	        <input type="text" class="form-control" name="email" id="en-email" required="required" />
+							 	        <p class="help-block hint_0_default default caution">Enter your Email.</p>
+							 			<p class="help-block hint_0_warning glyphicon glyphicon-exclamation-sign" style="color: red;">Please enter the correct Email address</p>
+							 			<p class="help-block hint_0_succeed glyphicon glyphicon-ok-sign" style="color: green;"></p>
+							 	    </div>
+						 		</div>
+								<div class="form-group">
+									<label for="en-username" class="col-lg-1 col-md-2 col-sm-2 control-label">Username：</label>
+									<div class="col-lg-4 col-md-5 col-sm-7">
+										<input type="text" class="form-control" name="usrname" id="en-username" required="required" />
+										<p class="help-block hint_1_default default caution">6~18 characters, can use letter, number, underline, need to start with letter</p>
+										<p class="help-block hint_1_warning glyphicon glyphicon-exclamation-sign" style="color: red;">Incorrect username input</p>
+										<p class="help-block hint_1_succeed glyphicon glyphicon-ok-sign" style="color: green;">Username available</p>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="en-password" class="col-lg-1 col-md-2 col-sm-2 control-label">Password：</label>
+									<div class="col-lg-4 col-md-5 col-sm-7">
+										<input type="password" class="form-control" name="password" id="en-password" required="required" />
+										<p class="help-block hint_2_default default caution">6~16 characters, case sensitive</p>
+										<p class="help-block hint_2_warning glyphicon glyphicon-exclamation-sign" style="color: red;">Incorrect password entry</p>
+										<p class="help-block hint_2_succeed glyphicon glyphicon-ok-sign" style="color: green;"></p>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="checkpassword" class="col-lg-1 col-md-2 col-sm-2 control-label">Confirm：</label>
+									<div class="col-lg-4 col-md-5 col-sm-7">
+										<input type="password" class="form-control" name="checkpassword" id="checkpassword" required="required" />
+										<p class="help-block hint_3_default default caution">Please fill in the password again</p>
+										<p class="help-block hint_3_warning glyphicon glyphicon-exclamation-sign" style="color: red;">The two passwords are not consistent</p>
+										<p class="help-block hint_3_succeed glyphicon glyphicon-ok-sign" style="color: green;"></p>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-lg-offset-1 col-md-offset-2 col-sm-offset-2 col-lg-4 col-md-5 col-sm-7">
+										<div class="checkbox">
+											<label>
+						 					<input type="checkbox" checked="checked" />Agree&#34;<a href="#">Terms of Service</a>&#34;and&#34;<a href="#">Privacy Policy</a>&#34;
+						 				</label>
+										</div>
+									</div>
+								</div>
+								<div class="form-group col-lg-6 col-md-5 col-sm-7" style="text-align: center;">
+									<button type="submit" class="btn btn-primary" id="register-btn">Sign Up Right Away</button>
+								</div>
+							</form>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal" onclick="clearform()">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/vcode.js"></script>
+		<script src="js/index.js"></script>
+	</body>
+</html>

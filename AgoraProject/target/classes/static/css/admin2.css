@@ -1,0 +1,45 @@
+.body{
+    overflow: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+td{
+    white-space: nowrap;/*控制单行显示*/
+    overflow: hidden;/*超出隐藏*/
+    text-overflow: ellipsis;/*隐藏的字符用省略号表示*/
+}
+
+.table{
+    width: 100%;
+    /*display: none;*/
+}
+
+.sendBody{
+    box-sizing: border-box;
+    margin: 0 auto 0;
+    padding: 40px;
+    width: 1000px;
+    height: 330px;
+}
+
+.title{
+    font-size: 30px;
+}
+
+.inputBlock{
+    width: 500px;
+}
+
+.sendBtn{
+    float: right;
+    width: 150px;
+}
+
+.historyBody{
+    box-sizing: border-box;
+    margin: 0 auto 0;
+    padding: 40px;
+    width: 1000px;
+    height: 330px;
+}

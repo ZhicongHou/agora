@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<script src="/js/jquery.min.js"></script>
+<script src="/layui/layui.js"></script>
+<link rel="stylesheet" href="/css/manger.css">
+<link rel="stylesheet" href="/layui/css/layui.css">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="page" th:fragment="page" align="center" style="height: 430px" >
+    <table cellspacing="0">
+        <thead>
+        <tr>
+            <th >课程名称</th>
+            <th >带课老师</th>
+            <th>开课日期</th>
+            <th>课程人数上限</th>
+            <th>是否授权</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="section:${sections}">
+            <div th:if="${section.authorized} eq false">
+                <th><a th:text="${section.title}" th:href="@{'/getSectionInfo?secId='+${section.secId}}"  target="_blank">课程名称</a></th>
+                <th th:text="${section.teaName}">带课老师</th>
+                <th th:text="${section.startDate}">开课日期</th>
+                <th th:text="${section.upperLimit}">课程人数上限</th>
+                <th>
+                    <button th:onclick="|inputProportion('${section.secId}')|">授权</button>
+                </th>
+            </div>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="page" id="findPage"></div>
+<script th:inline="javascript">
+    function author(secId){
+        var pageNum = [[${pageNum}]];
+        $('#page').load('/authorizeSection?pageNum='+pageNum+'&secId='+secId);
+    }
+    $(document).ready(function(){
+        var account = [[${total}]];
+        layui.use('laypage', function () {
+            var laypage = layui.laypage;
+            //分页器的绑定
+            laypage.render({
+                elem: 'findPage'//id
+                , curr: 1
+                , limit: 10 //一页最多的个数
+                , count:account //总数，从后台获取
+                , jump: function (page, first) {
+                    $('#page').load('/getOtherAuthorSeciton?pageNum='+page.curr);
+                }
+            });
+        });
+    });
+    function inputProportion(secId){
+        //将输入的内容赋给变量name
+        var pageNum = [[${pageNum}]];
+        var proportion = prompt("请输入修改支付金额的比例:","");
+        //这里需要注意的是,prompt有两个参数,前面是提示的话,后面是当对话框出来后,在对话框里的默认值
+        //若点击取消按钮,则返回值为null,类型为object
+        //若点击确认按钮,则返回值为输入的字符串(不输入时为空字符串),类型为string
+        if(proportion){
+            if(proportion < 0 || proportion>100){
+                alert('请输入0~100');
+            }else{
+                $('#page').load("/authorizeSection?secId="+secId+"&pageNum="+pageNum+"&proportion="+proportion,function () {
+                    alert('授权成功');
+                });
+            }
+
+        }else{
+            alert("取消:"+proportion);
+        }
+    }
+</script>
+</body>
+</html>

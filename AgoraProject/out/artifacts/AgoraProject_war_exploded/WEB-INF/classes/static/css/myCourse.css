@@ -1,0 +1,72 @@
+.myCourseBody{
+    margin-top: 50px!important;
+}
+
+.cover{
+    box-sizing: border-box;
+    border-radius: 3px;
+    height: 147px;
+    width: 100%;
+}
+
+.title{
+    padding: 10px;
+}
+
+.courseName{
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+}
+
+.teacherName{
+    float: right;
+    font-size: small;
+    color: lightslategrey;
+}
+
+.coursePrice{
+    float: left;
+    color: lightslategrey;
+}
+
+.display2{
+    background-color: lightskyblue;
+    border-radius: 5px;
+    box-sizing: border-box;
+    padding: 10px;
+    margin: 10px 0.5%;
+    width: 23%;
+}
+
+.display3{
+    background-color: lightgreen;
+    border-radius: 5px;
+    box-sizing: border-box;
+    padding: 10px;
+    margin: 10px 0.5%;
+    width: 23%;
+}
+.moreBtn{
+    float: right;
+}
+.moreIcon{
+    font-size: 14px!important;
+}
+
+.coursesTitle{
+    font-size: 30px;
+}
+
+.purchasedClasses,.myClasses{
+    margin-bottom: 10px;
+}
+
+
+.purchased,.myClass{
+    margin-bottom: 20px;
+}
+
+.page{
+    text-align:center;
+}

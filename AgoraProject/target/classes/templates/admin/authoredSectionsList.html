@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <link rel="stylesheet" href="/css/admin2.css">
+    <title>authoredSectionsList</title>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header" style="height: 48px!important;">
+        <a href="/index"><div class="layui-logo">agora</div></a>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item"><a href="/admin/logout" th:method="post">退出</a></li>
+        </ul>
+    </div>
+    <div class="layui-side layui-bg-black" >
+        <div class="layui-side-scroll">
+            <ul class="layui-nav layui-nav-tree">
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a href="javascript:;">用户和课程</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="/admin/usersList">用户</a></dd>
+                        <dd><a href="/admin/teachersList">老师</a></dd>
+                        <dd><a href="/admin/unfinishedSectionsList">未完结课程</a></dd>
+                        <dd><a href="/admin/finishedSectionsList">已完结课程</a></dd>
+                        <dd><a href="/admin/coursesList">添加科目</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a href="javascript:;">认证和授权</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="/admin/authenedTeachersList">老师认证</a></dd>
+                        <dd class="layui-this"><a href="/admin/authoredSectionsList">课程授权</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a href="javascript:;">消息通知</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="/admin/sendMessageAdmin">发送消息</a></dd>
+                        <dd><a href="/admin/historyAdmin">历史消息</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a href="javascript:;">直播授权</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="/admin/livingSectionsList">正在上课</a></dd>
+                        <dd><a href="/admin/forbiddenSectionsList">已禁止上课</a></dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="layui-body body">
+        <table class="layui-hide" id="table" lay-filter="table"></table>
+    </div>
+
+    <script type="text/html" id="author">
+        <a class="layui-btn layui-btn-normal layui-btn-sm" style="width: 45%" lay-event="author">授权</a>
+        <a class="layui-btn layui-btn-danger layui-btn-sm" style="width: 45%" lay-event="refuse">拒绝</a>
+    </script>
+
+    <script type="text/html" id="teaInfo">
+        <a href="/admin/getTeacherInfoToAdmin?teaName={{d.teaName}}" class="layui-table-link" target="_blank">{{ d.teaName }}</a>
+    </script>
+
+    <script type="text/html" id="sectionInfo">
+        <a href="/admin/getSectionInfoToAdmin?secId={{d.secId}}" class="layui-table-link" target="_blank">{{ d.title }}</a>
+    </script>
+</div>
+</body>
+
+<script src="/js/jquery/jquery.min.js"></script>
+<script src="/layui/layui.js"></script>
+<script src="/js/admin/authoredSectionsList.js"></script>
+</html>

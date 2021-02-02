@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<script src="/layui/layui.js"></script>
+<script src="/js/jquery.min.js"></script>
+<link rel="stylesheet" href="/css/manger.css">
+<link rel="stylesheet" href="/layui/css/layui.css">
+
+<head>
+    <meta charset="utf-8"/>
+    <title></title>
+
+</head>
+<body>
+<div align="center">
+    <input type="radio" name="select" value="teacher">老师
+    <input type="radio" name="select" value="student">用户
+    <input type="radio" name="select" value="unfinishedSection">未完结课程
+    <input type="radio" name="select" value="finishedSection">已完结课程
+</div>
+
+<div th:if="${select} ne null">
+    <div id="find" th:fragment="find" align="center" style="height: 430px" >
+        <span th:value="${totalRecord}" hidden="hidden" id="totalRecord"></span>
+        <table cellspacing="0" th:if="${select} eq 'student'">
+            <caption>STUDENT LIST</caption>
+            <thead>
+            <tr>
+                <th >用户名</th>
+                <th >email</th>
+                <th >真实姓名</th>
+                <th>创建时间</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user:${users}">
+                <th><a th:text="${user.userName}" th:href="@{'/getUserInfo?userName='+${user.userName}}"  target="_blank"></a></th>
+                <th th:text="${user.email}">email</th>
+                <th th:text="${user.realName}">realname</th>
+                <th th:text="${user.createTime}">createtime</th>
+            </tr>
+            </tbody>
+        </table>
+        <table cellspacing="0" th:if="${select} eq 'teacher'">
+            <caption>TEACHER LIST</caption>
+            <thead>
+            <tr>
+                <th >用户名</th>
+                <th >电话号码</th>
+                <th >支付宝账号</th>
+                <th>简介</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="teaAuthen:${teaAuthens}">
+                <div th:if="${teaAuthen.authorized} eq true">
+                    <th><a th:text="${teaAuthen.userName}" th:href="@{'/getTeacherInfo?teaName='+${teaAuthen.userName}}"  target="_blank"></a></th>
+                    <th th:text="${teaAuthen.phoneNumber}">phone</th>
+                    <th th:text="${teaAuthen.alipayAccount}">account</th>
+                    <th th:text="${teaAuthen.resume}">resume</th>
+                </div>
+            </tr>
+            </tbody>
+        </table>
+        <table cellspacing="0" th:if="${select} eq 'finishedSection'">
+            <caption>SCTION LIST</caption>
+            <thead>
+            <tr>
+                <th >课程名称</th>
+                <th >带课老师</th>
+                <th>开课日期</th>
+                <th>课程人数上限</th>
+                <th>是否支付</th>
+                <th>设置支付金额的比例</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="section:${sections}">
+                <div th:if="${section.authorized} eq true" th:if="${section.attended/section.frequency} eq 1">
+                    <th><a th:text="${section.title}" th:href="@{'/getSectionInfo?secId='+${section.secId}}"  target="_blank"></a></th>
+                    <th th:text="${section.teaName}">带课老师</th>
+                    <th th:text="${section.startDate}">开课日期</th>
+                    <th th:text="${section.upperLimit}">课程人数上限</th>
+                    <th>
+                        <button th:if="${section.paid} eq false">支付</button>
+                        <span th:if="${section.paid} eq true">已支付</span>
+                    </th>
+                    <th>
+                        <button th:onclick="|updateProportion('${section.secId}')|">编辑</button>
+                    </th>
+                </div>
+            </tr>
+            </tbody>
+        </table>
+        <table cellspacing="0" th:if="${select} eq 'unfinishedSection'">
+            <caption>SCTION LIST</caption>
+            <thead>
+            <tr>
+                <th >课程名称</th>
+                <th >带课老师</th>
+                <th>开课日期</th>
+                <th>课程人数上限</th>
+                <th>设置支付金额的比例</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="section:${sections}">
+                <div th:if="${section.authorized} eq true" th:if="${section.attended/section.frequency} ne 1">
+                    <th><a th:text="${section.title}" th:href="@{'/getSectionInfo?secId='+${section.secId}}"  target="_blank"></a></th>
+                    <th th:text="${section.teaName}">带课老师</th>
+                    <th th:text="${section.startDate}">开课日期</th>
+                    <th th:text="${section.upperLimit}">课程人数上限</th>
+                    <th>
+                        <button th:onclick="|updateProportion('${section.secId}')|">编辑</button>
+                    </th>
+                </div>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="page" id="findPage"></div>
+</div>
+</div>
+<script th:inline="javascript">
+    function updateProportion(secId){
+        //将输入的内容赋给变量name
+        var pageNum = [[${pageNum}]];
+        var proportion = prompt("请输入修改支付金额的比例:","");
+        //这里需要注意的是,prompt有两个参数,前面是提示的话,后面是当对话框出来后,在对话框里的默认值
+        //若点击取消按钮,则返回值为null,类型为object
+        //若点击确认按钮,则返回值为输入的字符串(不输入时为空字符串),类型为string
+        if(proportion){
+            if(proportion < 0 || proportion>100){
+                alert('请输入0~100');
+            }else{
+                $('#page').load("/updateProportionBySecId?secId="+secId+"&proportion="+proportion,function () {
+                    alert('修改成功');
+                });
+            }
+
+        }else{
+            alert("取消:"+proportion);
+        }
+    }
+    var select= $(":radio").val();
+    $(function() {
+        $(":radio").click(function () {
+            select = $(this).val();
+            $('#find').load('/readOteherUserOfPage?select=' + select,function () {
+                layui.use('laypage', function () {
+                    var laypage = layui.laypage;
+                    //分页器的绑定
+                    laypage.render({
+                        elem: 'findPage'//id
+                        , curr: 1
+                        , limit: 10 //一页最多的个数
+                        , count: $('#totalRecord').attr("value")//总数，从后台获取
+                        , jump: function (page, first) {//这个方法在点击分页按钮的时候触发
+                            //page.curr为当前的页码，可以用(page.curr-1)*8作为索引来得到当前页的第一个课程，以此类推
+                            //first（是否首次，一般用于初始加载的判断），在我们这里不需要用到
+                            // console.log(page.curr);
+                            var firstc = (page.curr - 1) * 8;//第一个课程
+                            var lastc = (page.curr) * 8 - 1;//最后一个课程
+                            $('#find').load('/readOteherUserOfPage?select=' + select+'&pageNum='+page.curr);
+                        }
+                    });
+                });
+            });
+        });
+    });
+</script>
+</body>

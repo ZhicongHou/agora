@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin</title>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+</head>
+<body>
+
+
+老师列表：<ul id="teacherList"></ul><br>
+学生列表：<ul id="studentList"></ul><br>
+课程列表：<ul id="courseList"></ul><br>
+<button onclick="goNewCourse()">添加课程类型</button><br>
+已审核课程列表：<ul id="sectionList"></ul><br>
+待审核课程列表：<ul id="waitList"></ul><br>
+<p>资金管理：</p>
+<p id="amount"></p>
+<ul id="teaMoneyList"></ul>
+</body>
+
+
+
+<script   th:inline="javascript">
+    $(document).ready(function(){
+        $.ajax({
+            type: "get",
+            async : false,
+            url:"getAllTeachers",
+            data:  {},
+            datatype:"json",
+            success: function (data) {
+                for (var i = 0; i<data.length; i++){
+                    var text = "<li id='teacher"+data[i].username+"'>"+data[i].username+
+                        "<button onclick=\"detailedInformation('"+data[i].id+"',"+"'teacher'"+")\">查看</button></li>";
+                    $("#teacherList").append(text);
+                }
+            }
+        });
+
+        $.ajax({
+            type: "get",
+            async : false,
+            url:"getAllStudents",
+            data:  {},
+            datatype:"json",
+            success: function (data) {
+                for (var i = 0; i<data.length; i++){
+                    var text = "<li id='student"+data[i].username+"'>"+data[i].username+
+                        "<button onclick=\"detailedInformation('"+data[i].id+"',"+"'student'"+")\">查看</button></li>";
+                    $("#studentList").append(text);
+                }
+            }
+        });
+
+
+        $.ajax({
+            type: "get",
+            async : false,
+            url:"getAllCourses",
+            data:  {},
+            datatype:"json",
+            success: function (data) {
+                for (var i = 0; i<data.length; i++){
+                    var text = "<li id='course"+data[i].id+"'>课程名字:"+data[i].title+
+                        "<button onclick=\"deleteCourse('"+data[i].id+"')\">删除</button></li>";
+                    $("#courseList").append(text);
+                }
+            }
+        });
+
+        $.ajax({
+            type: "get",
+            async : false,
+            url:"getAllSections",
+            data:  {},
+            datatype:"json",
+            success: function (data) {
+                for (var i = 0; i<data.length; i++){
+                    if(data[i].authorized){
+                        var text = "<li id='section"+data[i].secId+"'> title:"+data[i].title+",  price:"+data[i].price+
+                            "<button onclick=\"detailedInformation('"+data[i].secId+"',"+"'section'"+")\">查看</button></li>";
+                        $("#sectionList").append(text);
+                    }else{
+                        var text = "<li id='section"+data[i].secId+"'> title:"+data[i].title+",  price:"+data[i].price+
+                            "<button onclick=\"authorize('"+data[i].secId+"')\">授权</button></li>";
+                        $("#waitList").append(text);
+                    }
+                }
+            }
+        });
+
+        $.ajax({
+            type: "get",
+            async : false,
+            url:"getMoney",
+            data:  {},
+            datatype:"json",
+            success: function (data) {
+                var money = 0;
+                for(var teacher in data){
+                    var text = "<li id='money"+teacher+"'>"+teacher+" : "+data[teacher]+
+                        "<button onclick=\"sendMessage('"+teacher+"',"+data[teacher]+")\">结算</button></li>";
+                    // "<a href='transfer?teacherName="+teacher+"'>结算</a></li>"
+                    $("#teaMoneyList").append(text);
+                    money += data[teacher];
+                }
+                $("#amount").text("总工资："+money);
+            }
+        });
+    });
+
+    function authorize(secId) {
+        window.location.href = "authorizeSection?secId="+secId;
+    }
+
+    function deleteCourse(id){
+        window.location.href = "deleteCourse?id="+id;
+    }
+
+    function goNewCourse(id){
+        window.location.href = "newCourse";
+    }
+
+    function sendMessage(teacher,price) {
+        var vNow = new Date();
+        var sNow = "";
+        sNow += String(vNow.getFullYear());
+        sNow += String(vNow.getMonth() + 1);
+        sNow += String(vNow.getDate());
+        sNow += String(vNow.getHours());
+        sNow += String(vNow.getMinutes());
+        sNow += String(vNow.getSeconds());
+        sNow += String(vNow.getMilliseconds());
+        var outputJSON = {
+            outBizNo: sNow,
+            teacherName: teacher,
+            amount: price,
+        };
+        $.ajax({
+            type: "post",
+            async : false,
+            url:"doTransfer",
+            data:  outputJSON,
+            success: function (data) {
+                alert("成功");
+            },
+            error: function (data) {
+              alert("失败");
+            },
+        });
+    };
+
+    function detailedInformation(sign,choice) {
+        switch (choice) {
+            case "student":
+                window.location.href = "studentMessage?studentName="+sign;
+                break;
+            case "teacher":
+                window.location.href = "teacherMessage?teacherName="+sign;
+                break;
+            case "section":
+                window.location.href = "sectionMessage?secId="+sign;
+                break;
+        }
+    }
+    
+</script>
+</html>

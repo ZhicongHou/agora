@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<script src="/js/jquery.min.js"></script>
+<script src="/layui/layui.js"></script>
+<link rel="stylesheet" href="/css/manger.css">
+<link rel="stylesheet" href="/layui/css/layui.css">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="page" th:fragment="page" align="center" style="height: 430px" >
+    <table cellspacing="0">
+        <thead>
+        <tr>
+            <th >老师名字</th>
+            <th >手机号码</th>
+            <th >支付宝账号</th>
+            <th>简介</th>
+            <th>认证</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="teaAuthen:${teaAuthens}">
+            <div th:if="${teaAuthen.authorized} eq false">
+                <th><a th:text="${teaAuthen.userName}" th:href="@{'/getTeacherInfo?teaName='+${teaAuthen.userName}}"  target="_blank">老师名字</a></th>
+                <th th:text="${teaAuthen.phoneNumber}">手机号码</th>
+                <th th:text="${teaAuthen.alipayAccount}">支付宝账号</th>
+                <th th:text="${teaAuthen.resume}">简介</th>
+                <th>
+                    <button th:onclick="|authen('${teaAuthen.userId}')|">认证</button>
+                </th>
+            </div>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="page" id="findPage"></div>
+<script th:inline="javascript">
+    function authen(userId){
+        var pageNum = [[${pageNum}]];
+        $('#page').load('/authorizeTeaAuthen?pageNum='+pageNum+'&userId='+userId);
+    }
+    $(document).ready(function(){
+        var account = [[${total}]];
+        layui.use('laypage', function () {
+            var laypage = layui.laypage;
+            //分页器的绑定
+            laypage.render({
+                elem: 'findPage'//id
+                , curr: 1
+                , limit: 10 //一页最多的个数
+                , count: account //总数，从后台获取
+                , jump: function (page, first) {
+                    $('#page').load('/getOtherTeaAuthen?pageNum='+page.curr);
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>giveCourse</title>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/layui/layui.js"></script>
+    <script src="/js/giveCourse.js"></script>
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <link rel="stylesheet" href="/css/giveCourse.css">
+</head>
+<body>
+<div class="nav"></div>
+<script>
+    $(".nav").load("/component/navigationBar");
+</script>
+
+<div class="givCourseBody">
+    <div class="title">申请开课</div>
+    <hr>
+    <form action="" class="layui-form inputForm" lay-filter="sectionData"  method="post" >
+        <div class="layui-form-item">
+            <label class="layui-form-label" name="courseName">科目名</label>
+            <div class="layui-input-block inputBlock">
+                <select name="courId" lay-verify="required" >
+                    <option value="">请选择一个科目</option>
+                    <option th:each="course:${courseList}" th:value="${course.getId()}" th:text="${course.getTitle()}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">课程名</label>
+            <div class="layui-input-block inputBlock">
+                <textarea name="title" type="text" maxlength="50" required  lay-verify="required" autocomplete="off" class="layui-textarea" style="resize: none;"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">课程简介</label>
+            <div class="layui-input-block inputBlock">
+                <textarea type="text" rows="10" maxlength="400" name="introduction" autocomplete="off" class="layui-textarea" style="resize: none;"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">开始日期</label>
+            <div class="layui-input-block inputBlock">
+                <input type="text" readonly class="layui-input" id="beginDate" name="startDate">
+            </div>
+        </div>
+        <div class="layui-form-item allTime">
+            <label class="layui-form-label">上课时间段</label>
+            <div class=" classTime layui-input-block">
+                <div class="layui-inline whichDayBlock" >
+                    <select id="whichDay1" class="whichDay" lay-verify="required" name="whichDay" >
+                        <option value="">星期几</option>
+                        <option value="星期一">星期一</option>
+                        <option value="星期二">星期二</option>
+                        <option value="星期三">星期三</option>
+                        <option value="星期四">星期四</option>
+                        <option value="星期五">星期五</option>
+                        <option value="星期六">星期六</option>
+                        <option value="星期日">星期日</option>
+                    </select>
+                </div>
+                <div class="layui-inline whenBlock">
+                    <input type="text" readonly  placeholder="开始时间" class="layui-input beginTime" id="beginTime1" name="beginTime" lay-verify="required">
+                </div>
+                <div class="layui-inline whenBlock">
+                    <input type="text" readonly  placeholder="结束时间" class="layui-input endTime" id="endTime1" name="endTime" lay-verify="required">
+                </div>
+                <div class="layui-inline addTime">
+                    <a href="javascript:;"><i class="layui-icon layui-icon-add-circle" style="font-size: 20px"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">价格</label>
+            <div class="layui-input-inline" style="width: 280px">
+                <input type="number" class="layui-input" id="price" name="price" required lay-verify="checkPrice" autocomplete="off"
+                       oninput="this.value=this.value.replace(/[^0-9.]+/,'');">
+            </div>
+            <div class="layui-form-mid layui-word-aux">元</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">学生容纳量</label>
+            <div class="layui-input-inline" style="width: 280px">
+                <input type="number" class="layui-input" id="capacity" name="upperLimit" required lay-verify="checkCapacity" autocomplete="off"
+                       onkeypress='return( /[\d]/.test(String.fromCharCode(event.keyCode) ) )'>
+            </div>
+            <div class="layui-form-mid layui-word-aux">人</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">课时</label>
+            <div class="layui-input-inline" style="width: 280px">
+                <input type="number" class="layui-input" id="classHour" name="frequency" required lay-verify="checkHour" autocomplete="off"
+                       onkeypress='return( /[\d]/.test(String.fromCharCode(event.keyCode) ) )'>
+            </div>
+            <div class="layui-form-mid layui-word-aux">个</div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block inputBlock">
+                <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="submit">提交</button>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+
+<script th:inline="javascript">
+    init([[${section}]]);
+</script>
+
+</html>

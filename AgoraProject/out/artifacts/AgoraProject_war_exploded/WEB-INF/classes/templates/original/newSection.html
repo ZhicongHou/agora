@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<script src="jquery-3.3.1.min.js"></script>
+<head>
+	<title>Newsction</title>
+</head>
+<body>
+	<form id="newSection-form" action="addSection" method="post">
+		start time:<input type="date" name="startTime" id="startTime">
+		end time:<input type="date" name="endTime" id="endTime">
+		price:<input type="number" name="price" id="price">
+		<button id="up",type="submit">up</button>
+	</form>
+<script>
+	$(document).ready(function(){
+		var startTime=$('#startTime');
+		var endTime=$('#endTime');
+		var price=$('#price');
+		var url=window.location.href;
+    	url = url.split("?")[1];
+	    var arr = url.split("=");
+    	var courseId=arr[1];
+		$("#newSection-form").submit(function login(){
+            var newurl = "addSection?courseId=" + courseId;
+            $(this).attr("action" , newurl);
+		var outputJSON = {
+							startTime: startTime.val(),
+							endTime: endTime.val(),
+							price:price.val(),
+	                     };
+		$.post(
+			'addSection',
+			{
+	        	data: JSON.stringify(outputJSON)
+	        },
+		    (data) => {
+			            if(data.flag == "true"){
+			            	alert("注册成功");
+			           	}else{
+			            	alert(data.content);
+			           	}
+		              },
+		    'json'
+	    );
+	});
+	});
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>room</title>
+    <script src="/js/AgoraSig.js"></script>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/layui/layui.js"></script>
+    <script src="/js/AgoraRTCSDK-2.5.0.js"></script>
+    <script src="/js/fullscreen.js"></script>
+    <script src="/js/recording.js"></script>
+    <script src="/js/useragorartc.js" th:inline="javascript"></script>
+    <script type="text/javascript" src="/js/usersignal.js"></script>
+    <link rel="stylesheet" href="/css/room.css">
+    <link rel="stylesheet" href="/layui/css/layui.css">
+</head>
+<body>
+<div class="nav"></div>
+<script>
+    $(".nav").load("/component/navigationBar");
+</script>
+<div class="layui-main mainBody">
+    <div class="screenWith layui-inline" >
+        <div class="courseInfo">
+            <span class="courseName" th:text="${section.title}">课程名称</span>
+            <span class="teacherName" th:text="${section.teaName}">任课老师</span>
+            <div class="btns layui-inline">
+                <img id="record" class="recordBtn" src="/img/record-red.png" alt="record">
+                <img id="pause" class="recordBtn" src="/img/pause.png" alt="pause">
+                <img id="stop" class="recordBtn" src="/img/stop.png" alt="stop">
+                <a class="handa" href="#"><img class="hand" src="/img/hand2.png" alt=""></a>
+            </div>
+        </div>
+        <div class="screen" id="teacherScreen"></div>
+        <img class="fullScreen" src="/img/fullscreen2.png" alt="fullScreen" onclick="showFull('teacherScreen')">
+    </div>
+
+    <div class="layui-tab layui-tab-brief roomTab layui-inline">
+        <ul class="layui-tab-title">
+            <li class="layui-this">讨论区</li>
+            <li>公告栏</li>
+            <li>下载</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show ">
+                <div class="msgShow">
+                    <ul class="layui-text" id="discussion"></ul>
+                </div>
+                <form class="layui-form">
+                    <div class="layui-form-item layui-form-text">
+                        <textarea name="desc" id="desc" placeholder="请输入内容" class="layui-textarea  msgText" style="resize: none" ></textarea>
+                    </div>
+                    <div class="layui-form-item sendBtn">
+                        <buttun id="sendMessage" class="layui-form-item layui-btn layui-btn-normal msgSend" >发送</buttun>
+                    </div>
+                </form>
+            </div>
+            <div class="layui-tab-item">
+                <div class="noticeShow">
+                    <div class="noticeItem" id="announcementId" th:fragment="announcementId">
+                        <p class="layui-text" th:text="${announcement.content}">
+                            这是一条公告
+                        </p>
+                        <p class="noticeOperation">
+                            <span class="layui-text noticeTime" th:text="${announcement.publishTime}">0000-00-00 00:00:00</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-tab-item">
+                <div class="download">
+                    <div id="fileList" th:fragment="fileList">
+                        <div class="downloadItem" th:each="file:${files}">
+                            <div class="layui-text layui-inline fileName" th:text="${file}">
+                                文件名
+                            </div>
+                            <div class="layui-inline">
+                                <a th:href="@{'download?secId='+${section.secId}+'&fileName='+${file}}">
+                                    <button class="layui-btn layui-inline" >下载</button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<a id="downloadLink" download="mediarecorder.webm" name="mediarecorder.webm" href></a>
+<script>
+    layui.use('element', function () {
+        var element = layui.element;
+    })
+</script>
+
+<script th:inline="javascript" >
+    var appId = [[${appId}]];
+    var userName = [[${session.user.userName}]];
+    var roomNum = [[${section.roomNumber}]];
+    layui.use('element', function () {
+        var element = layui.element;
+    })
+    var userAgora = new StudentAgora(appId,userName,roomNum,"teacherScreen");
+    userAgora.join();
+    function createStream(){
+        userAgora.createStream();
+        setTimeout( function(){
+            userAgora.publish();
+        }, 5 * 1000 );
+    }
+    function refreshFiles() {
+        var secId=[[${section.secId}]];
+        $('#fileList').load('/getStudentFileList?secId='+secId);
+    }
+    function refreshAnnouncement() {
+        var secId=[[${section.secId}]];
+        $('#announcementId').load('/refreshStudentAnnouncement?secId='+secId);
+    }
+    var userSignal = new UserDiscussionSignal(appId,userName,"student");
+    var channel;
+    setTimeout( function(){
+        channel = userSignal.joinChatChannel(roomNum,"discussion");
+    }, 5 * 1000 );
+    // //监听窗口关闭事件
+    var recording = new Recording('a#downloadLink');
+
+    window.onbeforeunload = function(){
+        userSignal.leaveChatChannel(channel);
+        userAgora.close();
+    }
+    $(function () {
+        var $msgShow =  $(".msgShow");
+        $msgShow[0].scrollTop = $msgShow[0].scrollHeight;//让滚动条自动滚到底部
+
+        $("#sendMessage").click(function () {
+            var text = $("#desc").val();
+            if(text!=""){
+                userSignal.sendChatMessage(channel,text);
+                $("#desc").val("");
+            }
+        });
+
+        //举手功能
+        var hand = false;//未举手
+        $(".hand").on("click",function () {
+            if(hand === false){
+                hand = true;
+                $(".hand").attr("src","img/hand-green.png");
+                userSignal.sendChatMessage(channel,"jushoushou2233");
+            }
+            else {
+                hand=false;
+                $(".hand").attr("src","img/hand.png");
+                userSignal.sendChatMessage(channel,"quxiaojushoushou2233");
+            }
+        });
+
+        // recording, pause(就绪，正在录制，暂停)
+
+        var status = "ready";
+        $("#record").on("click",function () {
+            if(userAgora.teacherStream!=null){
+                if (status === "recording" || status === "pause"){
+                    return;
+                }
+                if(status === "ready"){
+                    status = "recording";
+                    $('#record').attr("src","/img/record.png");
+                    $('#pause').attr("src","/img/pause-red.png");
+                    $('#stop').attr("src","/img/stop-red.png");
+                    recording.onBtnRecordClicked(userAgora.teacherStream);
+                }
+            }
+        });
+
+        $('#pause').on("click",function () {
+            if(userAgora.teacherStream!=null){
+                if(status === "ready"){
+                    $('#record').attr("src","/img/record.png");
+                    $('#pause').attr("src","/img/pause-red.png");
+                    $('#stop').attr("src","/img/stop-red.png");
+                    return;
+                }
+                if(status === "recording"){
+                    status = "pause";
+                    $('#record').attr("src","/img/record.png");
+                    $('#pause').attr("src","/img/start-red.png");
+                    $('#stop').attr("src","/img/stop-red.png");
+                    recording.onPauseClicked();
+                    return;
+                }
+                if(status === "pause"){
+                    status = "recording";
+                    $('#record').attr("src","/img/record.png");
+                    $('#pause').attr("src","/img/pause-red.png");
+                    $('#stop').attr("src","/img/stop-red.png");
+                    recording.onResumeClicked();
+                }
+            }
+        });
+
+        $('#stop').on("click",function () {
+            if(userAgora.teacherStream!=null){
+                if(status === "ready"){
+                    return;
+                }
+                if(status === "pause" || status === "recording"){
+                    status = "ready";
+                    $('#record').attr("src","/img/record-red.png");
+                    $('#pause').attr("src","/img/pause.png");
+                    $('#stop').attr("src","/img/stop.png");
+                    recording.onBtnStopClicked();
+                }
+            }
+        })
+
+    });
+
+</script>
+</body>
+</html>

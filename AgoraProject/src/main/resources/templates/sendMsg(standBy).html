@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>sendMsg</title>
+    <script src="/js/jquery/jquery.min.js"></script>
+    <script src="/layui/layui.js"></script>
+    <script src="/js/userFunction/sendMsg.js"></script>
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <link rel="stylesheet" href="/css/sendMsg.css">
+</head>
+<body>
+<div class="nav"></div>
+<script>
+    $(".nav").load("/component/navigationBar");
+</script>
+<div class="sendBody">
+    <div class="title">发送消息</div>
+    <hr>
+    <form action="" class="layui-form" id="messageFrom" lay-filter="messageFrom">
+        <div class="layui-form-item">
+            <label class="layui-form-label">收信人类型</label>
+            <div class="layui-input-block inputBlock">
+                <select name="receiver" id='receiver' lay-verify="required" lay-filter="type">
+                    <option value=""></option>
+                    <option value="all">全体用户</option>
+                    <option value="teachers">全体老师</option>
+                    <!--<option value="students">全体学生</option>-->
+                    <option value="one">单个用户</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item" id="receiverItem" style="display: none">
+            <label class="layui-form-label">用户名</label>
+            <div class="layui-input-block inputBlock">
+                <input type="text" maxlength="50" class="layui-input" name="receiverId" id="receiverId" autocomplete="off">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">内容</label>
+            <div class="layui-input-block inputBlock">
+                <textarea type="text" style="resize: none" rows="10" maxlength="1000" class="layui-textarea" id="messageContent"name="messageContent" required lay-verify="required" autocomplete="off"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block inputBlock">
+                <button class="layui-btn sendBtn" lay-filter="send" id="send">发送</button>
+            </div>
+        </div>
+    </form>
+    <script>
+        layui.use('form', function() {
+            var form = layui.form,
+                layer = layui.layer;
+            //设置用户名表单是否显示以及是否必填
+            form.on('select(type)', function (data) {
+                if (data.value === 'one') {
+                    $("#receiverItem input").attr("required", true).attr("lay-verify", "required");
+                    $("#receiverItem").slideDown();
+                } else {
+                    $("#receiverItem input").attr("required", false).attr("lay-verify", "");
+                    $("#receiverItem").slideUp();
+                }
+            });
+
+            $("#messageFrom").submit(function () {
+                //修改按钮样式
+                $(".sendBtn").addClass("layui-btn-disabled").attr("disabled",true)
+                    .html("发送中 <i class=\"layui-icon layui-icon-loading-1 layui-anim layui-anim-rotate layui-anim-loop\" style=\"display: inline-block\"></i>");
+                setTimeout(function () {//延时发送，改变按钮样式才能正确执行
+                    $.ajax({
+                        type: 'post',
+                        async: false,
+                        url: "/addMessage",
+                        data: {
+                            "receiver": $("#receiver").val(),
+                            "receiverId":$("#receiverId").val(),
+                            "content": $("#messageContent").val(),
+                        },
+                        datatype: "json",
+                        success: function (data) {
+                            var flag = data.flag;
+                            var content = data.content;
+
+                            // 将按钮样式变回来
+                            $(".sendBtn").removeClass("layui-btn-disabled").attr("disabled",false).html("发送");
+                            layer.alert(content,{
+                                skin: 'layui-layer-lan'
+                                ,closeBtn: 0
+                            });
+                            if (flag === "0") {
+                                //清空表单的值
+                                form.val('messageFrom',{
+                                    'receiver':''
+                                    ,'receiverId':''
+                                    ,'messageContent':''
+                                });
+                                // parent.window.location.reload();
+                            }
+                        }
+                    });
+                },500);
+                return false;
+            });
+
+        });
+    </script>
+</div>
+<div class="bottom" style="height: 300px"></div>
+</body>
+</html>

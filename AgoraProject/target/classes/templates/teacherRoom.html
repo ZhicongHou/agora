@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>teacher</title>
+    <script src="/js/jquery/jquery.min.js"></script>
+    <script src="/layui/layui.js"></script>
+    <link rel="stylesheet" href="/css/teacher.css">
+    <link rel="stylesheet" href="/layui/css/layui.css">
+</head>
+<body>
+<div class="nav"></div>
+<script>
+    $(".nav").load("/component/navigationBar");
+</script>
+<!--<button class="layui-btn test2" style="float: right">添加学生调试</button>-->
+<button class="layui-btn layui-btn-danger showStudents">
+    <i class="layui-icon layui-icon-form" style="margin-right: 5px;"></i>学生列表
+    <i class="layui-icon layui-icon-triangle-d" style="margin-left: 5px"></i></button>
+
+<div class="studentList2">
+    <div class="studentTitle layui-text">当前房间人数<span class="layui-badge studentBadge" id="amount">0</span></div>
+    <hr>
+    <div class="studentItem" th:each="student:${students}" id="studnetList1">
+        <span><img class="student" src="/img/student.png" th:id="|online${student.stuName}|"></span>
+        <div class="studentName layui-inline" th:text="|${student.stuName}|">学生名字</div>
+        <span><img class="hand" src="/img/hand.png" th:id="|hand${student.stuName}|"></span>
+        <span><button class="layui-btn layui-btn-xs layui-btn-normal layui-btn-disabled applyScreenBtn" disabled="disabled" th:id="|${student.stuName}|">
+            <img class="applyScreen" src="/img/screen-green.png" th:id="|${student.stuName}|"></button>
+        <a href="javascript:;"><button class="layui-btn layui-btn-xs layui-btn-danger layui-btn-disabled stopShareScreen" disabled="disabled" th:id="|${student.stuName}|">取消共享</button></a></span>
+    </div>
+</div>
+
+<div class=" layui-main myClassDiv">
+
+    <div class="screenWith layui-inline" >
+        <div class="courseInfo">
+            <div class="title layui-inline" th:text="${section.title}">学生屏幕</div>
+            <div class="layui-inline">
+                <button class="layui-btn layui-btn-radius layui-btn-disabled showAllScreens">显示所有学生屏幕</button>
+            </div>
+            <div class="teacherButtons layui-inline">
+                <img id="record" class="recordBtn" src="img/record-red.png" alt="record">
+                <img id="pause" class="recordBtn" src="img/pause.png" alt="pause">
+                <img id="stop" class="recordBtn" src="img/stop.png" alt="stop">
+                <a id="downloadLink" download="mediarecorder.webm" name="mediarecorder.webm"><img id="download" class="recordBtn" src="/img/download-black.png" alt="download"></a>
+                <button class="layui-btn layui-btn-radius layui-btn-normal beginClass"><img class="bell" src="img/bell.png" alt="">上课</button>
+            </div>
+        </div>
+        <div class="screen" id="smallStudentScreen">
+
+        </div>
+        <img class="fullScreen" src="/img/fullscreen2.png" alt="fullScreen" id="fullScreenId">
+    </div>
+    <!--<script src="/js/screen.js"></script>-->
+
+    <div class="layui-tab layui-tab-brief roomTab layui-inline" >
+        <ul class="layui-tab-title">
+            <ul class="layui-tab-title">
+                <li class="layui-this">讨论区</li>
+                <li onclick="getAnnouncement()">公告栏</li>
+                <li onclick="refreshFileList()">文件库(100M)</li>
+            </ul>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show ">
+                <div class="msgShow">
+                    <!--<ul class="layui-text" id="discussion"></ul>-->
+                    <div class="layui-text msgItem" id="discussion"></div>
+                </div>
+                <form class="layui-form">
+                    <div class="layui-form-item layui-form-text">
+                        <textarea name="desc" placeholder="初始化中，请稍后输入内容" disabled="disabled" onkeyup="value=value.replace(/<(.[^>]*)>/g, '')" class="layui-textarea msgText" style="resize: none" id="desc"></textarea>
+                    </div>
+                    <div class="layui-form-item sendBtn">
+                        <buttun class="layui-form-item layui-btn layui-btn-disabled msgSend" disabled="disabled" id="sendMessage">发送</buttun>
+                    </div>
+                </form>
+            </div>
+            <div class="layui-tab-item ">
+                <div class="noticeShow">
+                    <div class="noticeItem" id="announcementId" >
+                        <p class="layui-text">
+                            这是一条公告
+                        </p>
+                        <p class="noticeOperation">
+                            <span class="layui-text noticeTime" >0000-00-00 00:00:00</span>
+                            <a href="#" class="layui-icon layui-icon-delete noticeDelete"></a>
+                        </p>
+                    </div>
+                </div>
+                <form class="layui-form">
+                    <div class="layui-form-item layui-form-text">
+                        <textarea name="desc" placeholder="请输入内容" onkeyup="value=value.replace(/<(.[^>]*)>/g, '')" class="layui-textarea noticeTest" style="resize: none"></textarea>
+                    </div>
+                    <div class="layui-form-item sendBtn">
+                        <buttun class="layui-form-item layui-btn layui-btn-disabled noticeSend">发布</buttun>
+                    </div>
+                </form>
+            </div>
+            <div class="layui-tab-item">
+                <div class="download">
+                    <div class="downloadItem" id="fileList">
+                    </div>
+                </div>
+                <div class="uploadBtn">
+                    <button type="button" class="layui-btn layui-btn-normal layui-btn-radius" id="upload">
+                        <i class="layui-icon">&#xe67c;</i>上传文件
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/agora/AgoraSig.js"></script>
+<script src="/js/agora/AgoraRTCSDK-2.5.0.js"></script>
+<script src="/js/room/fullScreen.js"></script>
+<script src="/js/room/recording.js"></script>
+<script src="/js/room/teacherAgora.js"></script>
+<script src="/js/room/teacherSignal.js"></script>
+<script src="/js/room/teacherRoom.js"></script>
+
+<!--公告-->
+<script th:inline="javascript">
+
+</script>
+
+<script th:inline="javascript" >
+    teacherRoomInit([[${section.secId}]],[[${appId}]],[[${session.user.userName}]],[[${section.roomNumber}]],[[${section.title}]]);
+</script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <link rel="stylesheet" href="/css/register.css">
+</head>
+<body>
+    <div class="nav"></div>
+<div class="registerBody">
+    <p class="title">注册</p>
+    <hr>
+    <span class="tip layui-text">请输入注册所需资料</span>
+    <div class="inputData">
+        <form class="layui-form" method="post">
+            <div class="layui-text">必填:</div>
+            <div class="layui-form-item">
+                <input type="text" placeholder="用户名" autocomplete="off" id="userName" name="userName" class="layui-input" lay-verify="userName">
+            </div>
+            <div class="layui-form-item inputBlock">
+                <input type="password" placeholder="密码" autocomplete="off" id="password" name="password" class="layui-input" lay-verify="password">
+            </div>
+            <div class="layui-form-item inputBlock">
+                <input type="password" placeholder="确认密码" autocomplete="off" id="confirmPassword" name="confirmPassword" class="layui-input" lay-verify="confirmPw">
+            </div>
+
+            <div class="layui-form-item inputBlock">
+                <input type="text" placeholder="邮箱" autocomplete="off" id="emailAccount" name="emailAccount" class="layui-input" lay-verify="email">
+            </div>
+
+
+            <div class="layui-text">选填:</div>
+            <div class="layui-form-item inputBlock">
+                <input type="text" placeholder="真实姓名" autocomplete="off" name="realName" class="layui-input" >
+            </div>
+            <div class="layui-form-item inputBlock">
+                <select name="sex">
+                    <option value="">性别</option>
+                    <option value="male">男</option>
+                    <option value="female">女</option>
+                </select>
+            </div>
+
+            <div class="layui-form-item code layui-inline">
+                <input type="text" placeholder="验证码" autocomplete="off" name="code" class="layui-input" lay-verify="required">
+            </div>
+            <div class="codeImg layui-inline">
+                <img class="codeImg2" src="/getVerifyImage" style="width:150px;height: 45px ;" alt="">
+                <a href="javascript:;"><img class="flush" src="/img/flush.png" alt=""></a>
+            </div>
+            <div>
+                <button class="layui-btn layui-btn-fluid registerBtn" lay-filter="register" lay-submit>注册</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="bottom" style="height: 300px"></div>
+</body>
+<script src="/js/jquery/jquery.min.js"></script>
+<script>
+    $(".nav").load("/component/navigationBar");
+</script>
+<script src="/layui/layui.js"></script>
+<script src="/js/userFunction/register.js"></script>
+</html>

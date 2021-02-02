@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>userInfo</title>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/layui/layui.js"></script>
+    <script src="/js/teacherInfo.js"></script>
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+<div class="nav"></div>
+<script>
+    $(".nav").load("/component/navigationBar");
+</script>
+<div class="mainBody">
+    <div class="title">老师个人信息</div>
+    <hr>
+    <div class="layui-text">
+        <div class="item">
+            <div class="label layui-inline">用户名 : </div>
+            <a th:href="@{'/getUserInfo?userName='+${user.userName}}"><span class="userName" th:text="${user.userName}"></span></a>
+        </div>
+        <div class="item">
+            <div class="label layui-inline">真实姓名 : </div>
+            <span class="realName" th:text="${user.realName}"></span>
+            <span class="realName" th:if="${user.realName}==''">未填</span>
+        </div>
+        <div class="item">
+            <div class="label layui-inline">性别 : </div>
+            <span class="sex" th:text="${user.sex}"></span>
+            <span class="sex" th:if="${user.sex}==''">未填</span>
+        </div>
+        <div class="item">
+            <div class="label layui-inline">邮箱 : </div>
+            <span class="email" th:text="${user.email}"></span>
+        </div>
+        <div class="item">
+            <div class="label layui-inline">支付宝 : </div>
+            <span class="alipay" th:text="${teaAuten.alipayAccount}"></span>
+        </div>
+        <div class="item">
+            <div class="label layui-inline">手机号 : </div>
+            <span class="phoneNumber" th:text="${teaAuten.phoneNumber}"></span>
+        </div>
+        <div class="item">
+            <div class="label layui-inline">创建时间 : </div>
+            <span class="createTime" th:text="${user.createTime}"></span>
+        </div>
+        <div class="item">
+            <div class="label layui-inline">老师简介 : </div>
+            <div class="resume layui-inline" th:text="${teaAuten.resume}"></div>
+        </div>
+        <div class="item">
+            <div class="label layui-inline" style="vertical-align: top">已开课课程 : </div>
+            <div class="layui-inline">
+                <table width="" class="layui-table" style="text-align:center; margin-top: -5px">
+                    <colgroup>
+                        <col width="150px">
+                        <col width="150px">
+                        <col width="150px">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th style="text-align:center;">课程名</th>
+                        <th style="text-align:center;">任课老师</th>
+                        <th style="text-align:center;">价格（元）</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="section:${sections}">
+                        <td><a th:href="@{'/getSectionInfo?secId='+${section.secId}}" th:text="${section.title}"></a></td>
+                        <td th:text="${section.teaName}"></td>
+                        <td th:text="${section.price}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+</script>
+</html>

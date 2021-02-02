@@ -1,0 +1,42 @@
+.indexBody{
+    margin-top: 50px!important;
+}
+
+.display{
+    background-color: gainsboro;
+    border-radius: 5px;
+    box-sizing: border-box;
+    padding: 10px;
+    margin: 10px 0.5%;
+    width: 23%;
+}
+
+.cover{
+    background-color: #110f25;
+    text-align: center;
+    box-sizing: border-box;
+    border-radius: 3px;
+    height: 147px;
+    width: 100%;
+}
+
+.title{
+    padding: 10px;
+}
+
+.courseName{
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+}
+
+.teacherName{
+    float: right;
+    font-size: small;
+    color: lightslategrey;
+}
+
+.coursePrice{
+    float: left;
+    color: lightslategrey;
+}

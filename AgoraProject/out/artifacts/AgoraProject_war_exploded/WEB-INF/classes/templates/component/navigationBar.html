@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>nav</title>
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <link rel="stylesheet" href="/css/navigationBar.css">
+    <script src="/js/navigationBar.js"></script>
+</head>
+<body>
+<div class="layui-header header">
+    <div class="layui-main">
+        <a class="logo" href="/index">
+            <img src="/img/logo.png" alt="logo" style="height: 80px;width: auto">
+        </a>
+
+        <!--未登录时的显示-->
+        <ul  class="layui-nav navBar" th:if="${session.user}==null"  >
+            <li class="layui-nav-item log" lay-unselect><a>登录</a></li>
+            <li class="layui-nav-item reg" lay-unselect><a>注册</a></li>
+        </ul>
+
+        <!--普通用户的导航栏-->
+        <ul class="layui-nav navBar" th:if='${session.user}!=null'>
+            <li class="layui-nav-item">
+                <a class="userName" href="javascript:;" th:text="${session.user.getUserName()}" href="/userHome">用户名</a>
+            </li>
+            <li class="layui-nav-item message msg">
+                <a href="javascript:;">
+                    <img class="bellIcon" style="height: 18px; width: auto; margin-right: 5px;" src="/img/bell.png" alt="">消息<span class="layui-badge msgBadge">0</span>
+                 </a>
+            </li>
+            <li class="layui-nav-item myStudy"><a href="/myCourse">我的课程</a></li>
+            <li class="layui-nav-item giveCourse"><a href="/giveCourse">我要开课</a></li>
+            <li class="layui-nav-item logout"><a>退出</a></li>
+        </ul>
+
+    </div>
+</div>
+<div class="messageShow msg">
+    <strong class="layui-text" style="">消息中心</strong>
+    <a href="/history" style="color: #1497db; float: right; font-size: small">查看更多</a>
+    <hr>
+    <div class="allMsg"></div>
+</div>
+
+
+<script th:inline="javascript">
+    $(document).ready(function() {
+        init([[${session.user}]]);
+    });
+</script>
+</body>
+
+</html>

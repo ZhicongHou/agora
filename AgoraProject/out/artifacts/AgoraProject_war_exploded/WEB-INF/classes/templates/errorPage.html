@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>提示页面</title>
+    <script src="/js/jquery.min.js"></script>
+</head>
+<body>
+
+
+<h3 id="errorMsg" ></h3>
+
+</body>
+
+<script type="text/javascript" th:inline="javascript">
+
+$(document).ready(function () {
+    $("#errorMsg").text([[${errorMsg}]]);
+    setTimeout(function () {
+        window.location.href = [[${redirectUrl}]]==null?"/index":[[${redirectUrl}]];
+    },3000);
+});
+
+
+
+</script>
+</html>

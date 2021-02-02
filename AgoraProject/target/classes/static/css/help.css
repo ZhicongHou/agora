@@ -1,0 +1,28 @@
+
+.helpBody{
+    box-sizing: border-box;
+    margin: 0 auto 200px;
+    padding: 40px;
+    width: 1100px;
+    border-radius: 3px;
+}
+
+.title{
+    font-size: 30px;
+}
+
+.instruction{
+
+}
+
+.span{
+    margin-top: 50px;
+    margin-bottom: 60px;
+}
+
+.span div{
+    font-size: 18px!important;
+    color: #2b2b2b;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}

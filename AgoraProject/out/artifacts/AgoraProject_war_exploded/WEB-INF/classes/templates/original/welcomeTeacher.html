@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<script src="jquery-3.3.1.min.js"></script>
+<head>
+	<title>welcome teacher</title>
+</head>
+<body>
+可开课列表：<ul id="canopenclass"></ul>
+已开课列表：<ul id="openedclass"></ul>
+</body>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $.ajax({
+            type: "get",
+            async : false,
+            url: "getAllCourses",
+            data:  {},
+            datatype:"json",
+            success: function (data) {
+                var json = eval(data); //数组
+                $.each(json, function (index, item) {
+                    //循环获取数据
+                    var courseId = json[index].id;
+                    var title = json[index].title;
+                    $('#canopenclass').append("<div><li id=\""+courseId+"\">"+title+"<button id=\"b"+courseId+"\">申请</button></li></div>");
+                    $('#b'+courseId).click(function(){
+                        window.location.href='newSection?courseId='+courseId;
+                    });
+                });
+            }
+        });
+
+        $.ajax({
+            type: "get",
+            async : false,
+            url: "getTeacherSections",
+            data:  {},
+            datatype:"json",
+            success: function (data) {
+                var json = eval(data); //数组
+                $.each(json, function (index, item) {
+                    //循环获取数据
+                    var sectionId = json[index].secId;
+                    $('#openedclass').append("<div><li id=\""+sectionId+"\">"+sectionId+"<button id=\"d"+sectionId+"\">进入</button></li></div>");
+                    $('#d'+sectionId).click(function(){
+                        window.location.href='teacher?sectionId='+sectionId;
+                    });
+                });
+            }
+        });
+
+    });
+</script>
+</html>

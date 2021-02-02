@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <title>help</title>
+    <script src="/js/jquery/jquery.min.js"></script>
+    <script src="layui/layui.js"></script>
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <link rel="stylesheet" href="css/help.css">
+</head>
+<body>
+<div class="nav"></div>
+<script>
+    $(".nav").load("/component/navigationBar");
+</script>
+
+    <div class="helpBody">
+        <div class="title">使用说明</div>
+        <hr>
+        <div class="instruction">
+            <div class="span">
+                <div>1. 本网站需要谷歌浏览器（Chrome），以及一个插件
+                    <a href="/downloadFile?secId=&fileName=chrome-extension.zip"><button class="layui-btn layui-btn-warm down">点击下载插件</button></a>
+                </div>
+            </div>
+            <div class="span">
+                <div>2. 下载完之后，右键解压，如图</div>
+                <div><img src="img/instruction-1.png" alt=""></div>
+            </div>
+            <div class="span">
+                <div>3. 打开谷歌浏览器（Chrome），右上角自定义控制---->更多工具---->扩展程序</div>
+                <div><img style="width: 100%;height: auto" src="img/instruction-2.png" alt=""></div>
+            </div>
+            <div class="span">
+                <div>4. 上个步骤的界面中，打开右上角的开发者模式：</div>
+                <div><img src="img/instruction-3.png" alt=""></div>
+            </div>
+            <div class="span">
+                <div>5. 点击左上角的“加载已解压的扩展程序”:</div>
+                <div><img style="width: 100%;height: auto" src="img/instruction-4.png" alt=""></div>
+            </div>
+            <div class="span">
+                <div>6. 选择下载文件解压的目录，确保红圈中的开关处于打开状态（如图）：</div>
+                <div><img style="width: 100%;height: auto" src="img/instruction-5.png" alt=""></div>
+            </div>
+        </div>
+    </div>
+    <div class="bottom" style="height: 300px"></div>
+</body>
+<!--<script>-->
+    <!--$(function () {-->
+        <!--var downloadHref = "/downloadFile?secId=&fileName=chrome-extension";-->
+        <!--$('.down').parents('a').attr('href',downloadHref);-->
+    <!--});-->
+<!--</script>-->
+</html>

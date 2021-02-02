@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>信令</title>
+    <script src="AgoraRTCSDK-2.5.0.js"></script>
+    <script src="agora.config.js"></script>
+    <script src="AgoraSig.js"></script>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+</head>
+<body>
+
+<input type="text" id="ilog">
+<button id="blog">登陆</button>
+<br>
+
+<input type="text" id="type">
+<input type="text" id="in">
+<button id="send">发送</button>
+
+
+<p id="amount">人数</p>
+<ul id="list"></ul>
+
+<br>
+<p >聊天记录</p>
+<ul id="chatlist"></ul>
+
+<br>
+<p >公告</p>
+<ul id="broadcast"></ul>
+
+</body>
+
+
+<script>
+class  SignalClient{
+    constructor(){
+        /**
+         *  参数
+         **/
+        this.appId = null;
+        this.cId = null;
+        this.chatRoomId = null;
+        this.onlineCount = 0;
+        /**
+         * 用于聊天
+         */
+        this.chatSession = null;
+        this.chatChannel = null;
+        this.onGetList = null;
+        /**
+         * 回调函数，需要在类之外进行赋值
+         * @type {null}
+         */
+        this.onReceiveChatMessage = null;
+        this.onUserJoined = null;
+        this.onUserLeaved = null;
+    }
+
+    login(uid, roomId){  //登陆
+        this.cId = uid;
+        this.appId = "074779f606ad40a6b8fe7ae8bb47b395";
+        this.chatRoomId = "chat"+roomId;
+        let signal = this;  //必须要申明一个引用，因为在function()里面，this并非指向这个类
+        signal.chatSession = new Signal(this.appId).login(signal.cId,"_no_need_token");
+        signal.chatSession.onLoginSuccess = function (cId) {    //登陆成功的回调函数，登陆成功之后对回调函数进行赋值，以及设置频道属性
+            alert("信令初始化成功！");
+            signal.chatChannel = signal.chatSession.channelJoin(signal.chatRoomId);
+            signal.chatChannel.channelSetAttr("_auto_update_num",1,function () { });    //设置自动更新用户列表
+            signal.chatChannel.onMessageChannelReceive = signal.onReceiveChatMessage;
+            //以下两句为：当有用户进出频道时，重新获取用户列表。可以设置为单个用户更新状态，而不是整个列表重新获取
+            signal.chatChannel.onChannelUserJoined = signal.onUserJoined;
+            signal.chatChannel.onChannelUserLeaved = signal.onUserLeaved;
+            signal.getList(signal.onGetList);
+        };
+    }
+    /**
+     * 需要在类之外，监听窗口关闭时调用该函数
+     */
+    logout(){
+        this.chatChannel.channelLeave(function (){});
+        this.chatSession.logout();
+    }
+    /**
+     * 发送聊天消息
+     * @param message
+     */
+    sendChatMessage(message){
+        this.chatChannel.messageChannelSend(message,function(){});
+    }
+    /**
+     * 重新获取用户列表
+     * @param cb 回调函数，需要在类之外进行赋值
+     */
+    getList(cb){
+        signal.chatSession.invoke("io.agora.signal.channel_query_userlist",{"name":this.chatRoomId},cb);
+    }
+}
+
+</script>
+
+<script>
+    /**
+     *
+     * signal.sendChatMessage：发送信息，发送信息时，发送的内容分为两部分：1.type即发送的类型、2、实际的内容。封装成一个json字符串
+     * signal.onReceiveChatMessage：收到信息时的回调函数
+     * signal.onGetList：初始登陆时获取列表的回调函数
+     * signal.onUserJoined：有用户进入房间时的回调函数
+     * signal.onUserLeaved：有用户进入房间时的回调函数
+     *
+      * @type {SignalClient}
+     */
+var signal = new SignalClient();
+$("#blog").click(function () {
+    var val = $("#ilog").val();
+    // $("#ilog").val("");
+    signal.login(val,"111");
+});
+
+//收到信息时的回调函数
+signal.onReceiveChatMessage = function(account, uid, message) {
+    message = JSON.parse(message);
+    if(message.type=="chat"){
+        $("#chatlist").append("<li>" + account + ": " + message.mess + "</li>");
+    }else{
+        $("#broadcast").append("<li>" + account + ": " + message.mess + "</li>");
+    }
+};
+
+//初始登陆时获取列表的回调函数
+signal.onGetList = function (err,val) {
+    signal.onlineCount = val.num;
+    $("#amount").text(signal.onlineCount);
+    var list = val.list;
+    for(var i = 0; i<list.length; i++){
+        $("#list").append("<li id='"+list[i][0]+"'>"+list[i][0]+"</li>");
+    }
+};
+
+//有用户进入房间时的回调函数
+signal.onUserJoined = function (uid,useless) {
+    signal.onlineCount++;
+    $("#amount").text(signal.onlineCount);
+    $("#list").append("<li id='"+uid+"'>"+uid+"</li>");
+};
+
+//有用户离开房间时的回调函数
+signal.onUserLeaved = function (uid,useless) {
+    signal.onlineCount--;
+    $("#amount").text(signal.onlineCount);
+    $("#"+uid).remove();
+};
+
+$("#send").click(function () {
+    var val = $("#in").val();
+    var type = $("#type").val();
+    $("#in").val("");
+    val = '{"type":"'+type+'", "mess":"'+val+'"}';
+    //发送信息的函数
+    signal.sendChatMessage(val);
+});
+
+//监听窗口关闭，关闭时登出信令
+window.onbeforeunload = function () {
+    signal.logout();
+};
+
+</script>
+
+
+</html>

@@ -1,0 +1,33 @@
+.TAbody{
+    box-sizing: border-box;
+    margin: 0 auto 0;
+    padding: 40px;
+    width: 1000px;
+    height: 330px;
+    border-radius: 3px;
+}
+
+.title{
+    font-size: 30px;
+}
+
+.inputBlock{
+    width: 330px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0;
+}
+
+.submitBtn{
+    /*float: right;*/
+    width: 150px;
+}
+
+.img{
+    margin-bottom: 5px;
+    height: 150px;
+    width: auto;
+}

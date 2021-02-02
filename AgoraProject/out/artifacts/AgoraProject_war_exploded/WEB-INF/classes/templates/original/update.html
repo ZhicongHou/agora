@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html style="height:100%">
+<head>
+    <title>找回密码</title>
+    <meta charset="utf-8"/>
+    <link rel="stylesheet" type="text/css" href="RPStyle.css"/>
+     <script  src="jquery-3.3.1.min.js"></script>
+     <script >
+        $(document).ready(function() {
+            $("#send").click(function(){
+
+                $.ajax({
+                    type: "put",
+                    url: "updateUser/{email}",
+                    data: {email: $("#email").val(), password: $("#pw1").val()},
+                    dataType: "json",
+					/**
+					success: function(result){
+                        alert("修改成功!");
+                    },
+                    error: function(xhr,errorText,errorType){
+                        alert("错误: "+errorText+":"+errorType+xhr.status);
+                    }
+                    */
+                    success: function(result){
+                        if(result.flag=="true")
+                        alert("修改成功!");
+                    else alert("修改失败"+ result.content);
+                    },
+                    error: function(xhr,errorText,errorType){
+                        alert("错误: "+errorText+":"+errorType+xhr.status);
+                    }
+                });
+            });
+        });
+</script>
+<script >
+        function checkPw()
+        {
+              var pw1=document.getElementById("pw1").value;
+              var pw2=document.getElementById("pw2").value;
+              if(pw1!=pw2)
+              {
+                     alert("输入密码不一致！");
+              }
+
+        }
+    </script>
+</head>
+<body>
+
+
+  <form  method="put" action="update/{email} ">
+<div class="RPframe">
+<h2 class="RPword">找回密码</h2>
+<div  class="block" >
+    <i class="idPo"></i>
+    <input class="inPut" type="text" name="emali" id="email" maxlength="25" required="required" autocomplete="off" placeholder="输入你的电子邮箱"/><br/>
+</div>
+<div  class="block" >
+    <i class="pwPo"></i>
+    <input class="inPut" type="password" id="pw1" maxlength="15"  name="password" required="required" placeholder="输入新密码"/>
+    <br/>
+</div>
+<div  class="block" >
+    <i class="pwPo"></i>
+    <input class="inPut" type="password" id="pw2" maxlength="15"  name="password01" required="required"  placeholder="确认新密码"
+     onblur="checkPw()" />
+    <br/>
+</div>
+<div class="block">
+    <input class="identifyingCode" type="text"  maxlength="4"  placeholder="验证码"/>
+    <input class="getIdentifyingCode" type="button" value="获取验证码"/>
+</div>
+<div class="block">
+    <input class="PRsubmit" type="button"   id="send" value="修改密码"/>
+</div>
+</div>
+</form>
+</body>
+</html>

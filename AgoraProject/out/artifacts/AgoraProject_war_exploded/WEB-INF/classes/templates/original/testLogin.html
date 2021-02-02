@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>login</title>
+</head>
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+<body>
+<form id="login-form" action="/login" method="post">
+	username:<input type="text" id="username", name="username">
+	password:<input type="password" id="password", name="password">
+	teacher:<input type="radio"  value="teacher" name='flag' >
+	student:<input type="radio"  value="student" name='flag'>
+	admin:<input type="radio" value="admin" name='flag'>
+	<button id="login" type="submit">login</button>
+</form>
+<!--<script type="text/javascript">-->
+    <!--$(document).ready(function(){-->
+        <!--var isStudent = true;-->
+        <!--var username=document.getElementById('username');-->
+        <!--var password=document.getElementById('password');-->
+        <!--$('#isTeacher').click(function(){-->
+            <!--if($('#isTeacher').is(':checked')){-->
+                <!--isStudent=false;-->
+            <!--}-->
+        <!--});-->
+        <!--$('#isStudent').click(function(){-->
+            <!--if($('#isStudent').is(':checked')){-->
+                <!--isStudent=true;-->
+            <!--}-->
+        <!--});-->
+
+        <!--$("#login-form").submit(function login(){-->
+            <!--var newurl = "login?isStudent=" + isStudent;-->
+            <!--$(this).attr("action" , newurl);-->
+            <!--var outputJSON = {-->
+                <!--username: $("#username").val(),-->
+                <!--password: $("#password").val(),-->
+                <!--// isStudent:$("#isStudent").val()-->
+            <!--};-->
+            <!--$.post(-->
+                <!--'login',-->
+                <!--{-->
+                    <!--data: JSON.stringify(outputJSON)-->
+                <!--},-->
+                <!--(data) => {-->
+                <!--if(data.flag == "true"){-->
+                <!--alert("注册成功");-->
+            <!--}else{-->
+                <!--alert(data.content);-->
+            <!--}-->
+        <!--},-->
+            <!--'json'-->
+        <!--);-->
+        <!--});-->
+    <!--});-->
+
+
+<!--</script>-->
+</body>
+</html>

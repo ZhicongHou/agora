@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <script src="/js/jquery/jquery.min.js"></script>
+    <script src="/layui/layui.js"></script>
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <link rel="stylesheet" href="/css/admin3.css">
+    <title>courseInfoToAdmin</title>
+</head>
+<body>
+<div class="mainBody">
+    <div class="title">课程信息</div>
+    <hr>
+    <div class="layui-text layui-inline" style="width: 50%;vertical-align: top">
+        <div class="item">
+            <div class="label2 layui-inline">课程名 : </div>
+            <span class="className" th:text="${section.title}"></span>
+        </div>
+        <div class="item">
+            <div class="label2 layui-inline">科目名 : </div>
+            <span class="courseName" th:text="${course.title}"></span>
+        </div>
+        <div class="item">
+            <div class="label2 layui-inline">课程图片 : </div>
+            <div class="layui-inline">
+                <img class="picture" th:src="@{'/downloadSectionImage?secId='+ ${section.secId}}" alt="">
+            </div>
+        </div>
+        <div class="item">
+            <div class="label2 layui-inline">价格 : </div>
+            <span class="price" th:text="${section.price}"></span>
+        </div>
+        <div class="item">
+            <div class="label2 layui-inline">任课老师 : </div>
+            <a th:href="@{'/admin/getTeacherInfoToAdmin?teaName='+${section.teaName}}" ><span class="teacherName" th:text="${section.teaName}"></span></a>
+        </div>
+        <div class="item">
+            <div class="label2 layui-inline">开始时间 : </div>
+            <span class="beginTime" th:text="${section.startDate}"></span>
+        </div>
+        <div class="item">
+            <div class="label2 layui-inline">上课时间 : </div>
+            <div class="layui-inline" style="margin-top: -15px">
+                <table width="" class="layui-table" style="vertical-align: top!important;text-align:center">
+                    <colgroup>
+                        <col width="110px">
+                        <col width="110px">
+                        <col width="110px">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th style="text-align:center">开始时间</th>
+                        <th style="text-align:center">结束时间</th>
+                    </tr>
+                    </thead>
+                    <tbody class="classTime">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="item">
+            <div class="label2 layui-inline">是否完结 : </div>
+            <span class="isFinished" th:if="${section.paid} eq false">未完结</span>
+            <span class="isFinished" th:if="${section.paid} eq true">已完结</span>
+        </div>
+        <div class="student">
+            <div>
+                <div class="layui-inline">
+                    <img src="img/student-black.png" class="icon" alt="" style="vertical-align: bottom">
+                    <span class="layui-text">学生容纳量</span>
+                    <span class="capacity" style="font-size: 25px;vertical-align: bottom" th:text="${section.upperLimit}"></span>
+                    <span class="layui-text">人</span>
+                </div>
+                <div class="layui-inline" style="position: relative;left: 50px">
+                    <img src="img/student-blue.png" class="icon" alt="" style="vertical-align: bottom">
+                    <span class="layui-text">已选人数</span>
+                    <span class="having" style="font-size: 25px; vertical-align: bottom;color: #1296db" th:text="${section.curAmount}"></span>
+                    <span class="layui-text">人</span>
+                </div>
+            </div>
+            <div class="layui-progress" lay-filter="student" style="margin-top: 15px">
+                <div class="layui-progress-bar" style="background-color: #1296db" ></div>
+            </div>
+        </div>
+        <div class="ClassHour" style="margin-top: 20px">
+            <div>
+                <div class="layui-inline">
+                    <img src="img/hour-black.png" class="icon" alt="" style="vertical-align: bottom">
+                    <span class="layui-text">总课时</span>
+                    <span class="totalHours" style="font-size: 25px;vertical-align: bottom"th:text="${section.frequency}"></span>
+                    <span class="layui-text">节</span>
+                </div>
+                <div class="layui-inline" style="position: relative;left: 50px">
+                    <img src="img/hour-orange.png" class="icon" alt="" style="vertical-align: bottom">
+                    <span class="layui-text">已完成课时</span>
+                    <span class="completed" style="font-size: 25px; vertical-align: bottom;color: #ffaa50" th:text="${section.attended}"></span>
+                    <span class="layui-text">节</span>
+                </div>
+            </div>
+            <div class="layui-progress" lay-filter="hour" style="margin-top: 15px">
+                <div class="layui-progress-bar" style="background-color: #ffaa50" ></div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-inline" style="margin-left: 100px">
+        <table width="" class="layui-table" style="vertical-align: top!important;text-align:center">
+            <colgroup>
+                <col width="">
+                <col width="">
+                <col width="">
+            </colgroup>
+            <thead>
+            <tr>
+                <th width="150px" style="text-align: center">学生列表</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="task:${tasks}">
+                <td class="layui-text" style="text-align: center"><a th:href="@{'/admin/getUserInfoToAdmin?userName='+${task.stuName}}" th:text="${task.stuName}"></a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="bottom" style="height: 300px"></div>
+</div>
+</body>
+<script th:inline="javascript">
+    var classTime = [[${section.classTime}]];
+    var classTime = classTime.split(",");
+    for(var i = 0; i<classTime.length; i++){
+        var units = classTime[i].split(" ");
+        addClassTime(units[0],units[1],units[2]);
+    }
+    //添加上课时段
+    function addClassTime(whichDay,begin,end) {
+        $(".classTime").append("<tr>\n" +
+            "                    <td>"+whichDay+"</td>\n" +
+            "                    <td>"+begin+"</td>\n" +
+            "                    <td>"+end+"</td>\n" +
+            "                </tr>");
+    }
+
+</script>
+</html>

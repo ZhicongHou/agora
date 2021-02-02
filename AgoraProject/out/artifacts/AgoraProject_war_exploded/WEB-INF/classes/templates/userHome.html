@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>userHome</title>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/layui/layui.js"></script>
+    <script src="/js/userHome.js"></script>
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <link rel="stylesheet" href="/css/userHome.css">
+</head>
+<body>
+<div class="nav"></div>
+<script>
+    $(".nav").load("/component/navigationBar");
+</script>
+<div class="userHomeBody">
+    <div class="title">个人资料</div>
+    <hr>
+    <form class="layui-form" lay-filter="userData" action="" method="post">
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户名</label>
+            <div class="layui-input-block inputBlock">
+                <input type="text"  class="layui-input" name="userName" readonly required lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">真实姓名</label>
+            <div class="layui-input-block inputBlock">
+                <input type="text"  class="layui-input" name="realName" required lay-verify="required" autocomplete="off">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">性别</label>
+            <div class="layui-input-block inputBlock">
+                <select name="sex">
+                    <option value="">保密</option>
+                    <option value="男" >男</option>
+                    <option value="女" >女</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">邮箱</label>
+            <div class="layui-input-block inputBlock">
+                <input type="text"  class="layui-input" name="email" readonly>
+            </div>
+        </div>
+        <!--<div class="layui-form-item">-->
+            <!--<label class="layui-form-label">手机</label>-->
+            <!--<div class="layui-input-block inputBlock">-->
+                <!--<input type="text" class="layui-input" name="phoneNumber" readonly>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="layui-form-item">-->
+            <!--<label class="layui-form-label">个人简历</label>-->
+            <!--<div class="layui-input-block">-->
+                <!--<textarea style="resize: none;" rows="15" type="text" maxlength="600" class="layui-textarea" name="resume" required  autocomplete="off"></textarea>-->
+            <!--</div>-->
+        <!--</div>-->
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn confirmBtn" lay-submit lay-filter="submit">确认修改</button>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+<script th:inline="javascript">
+    init([[${session.user}]]);
+</script>
+</html>

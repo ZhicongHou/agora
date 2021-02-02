@@ -1,0 +1,177 @@
+*{
+    margin: 0 auto;
+    padding: 0;
+}
+.mainBody{
+    border: #01AAED!important;
+}
+
+.screen{
+    width: 732px;
+    height:412px;
+    border-radius: 3px;
+    box-shadow: darkgrey 0 0 30px 5px;
+    background-color: #364342;
+}
+.roomTab{
+    margin: 0 auto;
+    padding-left: 20px;
+    padding-top: 20px;
+    width: 380px;
+}
+.msgShow{
+    padding: 20px;
+    height: 200px;
+    background: lavender;
+    overflow:auto;
+}
+
+.noticeShow{
+    padding-right: 5px;
+    height: 240px;
+    overflow:auto;
+}
+
+.noticeItem{
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    background-color: cornsilk;
+}
+
+.sendBtn{
+    float: right;
+}
+
+.input{
+    resize: none;
+}
+
+.fullScreen{
+    height: 30px;
+    width: 30px;
+    position:absolute;
+    /*bottom:0;*/
+    right:0;
+}
+
+.recordBtn{
+    height: 30px;
+    width: 30px;
+    margin: 1px;
+    float: right;
+    right: 0;
+}
+
+.download{
+    padding: 20px;
+    height: 325px;
+    overflow:auto;
+}
+
+.downloadItem{
+    padding-bottom: 10px;
+}
+
+.fileName{
+    width:235px;
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+}
+
+.uploadBtn{
+    margin-top: 10px;
+    margin-left: 259px;
+}
+
+.studentList{
+    height: 373px;
+    width: 125px;
+    border:1px solid lightgrey;
+    background: lightyellow;
+    overflow:auto;
+}
+
+.noticeOperation{
+    padding-top: 5px;
+    padding-bottom: 10px;
+}
+
+.noticeTime{
+    font-size: small!important;
+    float: left;
+}
+
+.noticeDelete{
+    float: right;
+}
+
+.courseInfo{
+    margin-bottom: 10px;
+}
+
+.courseName{
+    font-size: 30px;
+}
+
+.teacherName{
+    margin-left: 20px;
+    font-size: 15px;
+    color: #666;
+}
+.studentItem{
+    text-align: center;
+}
+.student{
+    height: 20px;
+    width: auto;
+    /*vertical-align:top;*/
+}
+
+.studentName{
+    margin-left: 5px;
+}
+
+.hand{
+    margin-left: 10px;
+    height: 20px;
+    width: auto;
+    /*vertical-align:top;*/
+}
+
+.leftNav{
+    top: 60px!important;
+    width: 165px!important;
+}
+
+.leftNav::-webkit-scrollbar {/*滚动条整体样式*/
+    width: 5px;     /*高宽分别对应横竖滚动条的尺寸*/
+    height: 1px;
+}
+.leftNav::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+    background: grey;
+}
+.leftNav::-webkit-scrollbar-track {/*滚动条里面轨道*/
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    background: lightgrey;
+}
+
+.studentsDiv{
+    display: none;
+}
+
+.icon{
+    margin-right: 5px;
+}
+
+.bell{
+    height: 20px;
+    width: auto;
+    margin-right: 5px;
+}
+
+.screenIcon{
+    height: 18px;
+    width: auto;
+    margin-right: 5px;
+}

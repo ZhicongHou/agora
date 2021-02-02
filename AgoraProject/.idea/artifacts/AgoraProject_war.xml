@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="AgoraProject:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>AgoraProject</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="Agora.io.test.war">
+      <element id="artifact" artifact-name="AgoraProject:war exploded" />
+    </root>
+  </artifact>
+</component>

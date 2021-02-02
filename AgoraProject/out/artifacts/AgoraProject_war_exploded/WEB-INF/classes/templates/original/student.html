@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Agora Web Sample</title>
+    <link rel="stylesheet" href="vendor/bootstrap.min.css">
+    <script src="AgoraRTCSDK-2.5.0.js"></script>
+    <script src="vendor/jquery.js"></script>
+    <script src="jquery-3.3.1.min.js"></script>
+</head>
+
+<body>
+<div id="div_device" class="panel panel-default">
+    <div class="select">
+        <label for="audioSource">Audio source: </label><select id="audioSource"></select>
+    </div>
+    <div class="select">
+        <label for="videoSource">Video source: </label><select id="videoSource"></select>
+    </div>
+</div>
+
+<div id="div_join" class="panel panel-default">
+    <div class="panel-body">
+        <button id="apply" class="btn btn-primary" onclick="apply()">Apply</button>
+        <button id="cancel" class="btn btn-primary" onclick="cancel()">cancel</button>
+    </div>
+</div>
+
+<div id="video" style="margin:0 auto;">
+    <div id="agora_local" style="float:right;width:210px;height:147px;display:inline-block;"></div>
+</div>
+
+<div id="container">
+    <div style = "text-align:center;">
+        <p>Media Recorder API Demo </p>
+        <p>Record a 320x240 video using the media recorder API implemented in Firefox and Chrome</p>
+        <button id="rec" onclick="onBtnRecordClicked()">Record</button>
+        <button id="pauseRes"   onclick="onPauseResumeClicked()" disabled>Pause</button>
+        <button id="stop"  onclick="onBtnStopClicked()" disabled>Stop</button>
+    </div>
+    <a id="downloadLink" download="mediarecorder.webm" name="mediarecorder.webm" href></a>
+    <p id="data"></p>
+    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+</div>
+
+
+
+<script language="javascript">
+    //查看游览器是否支持声网
+    if (!AgoraRTC.checkSystemRequirements()) {
+        alert("Your browser does not support WebRTC!");
+    }
+    //打印测试信息
+    AgoraRTC.Logger.error('this is error');
+    AgoraRTC.Logger.warning('this is warning');
+    AgoraRTC.Logger.info('this is info');
+    AgoraRTC.Logger.debug('this is debug');
+
+    var client, localStream, camera, microphone;
+    var audioSelect = document.querySelector('select#audioSource');//html文件读取，
+    var videoSelect = document.querySelector('select#videoSource');
+    var room;
+    var teacherUid;
+    var studentUid;
+    var teacherStream;
+
+    //读取后台数据库信息，根据课程代号获取房间号和用户ID
+    $(document).ready(function () {
+        var url = window.location.href;
+        url = url.split("?")[1];
+        var arr = url.split("=");
+        var secId = arr[1];
+        $.ajax({
+            type: "get",
+            async: false,
+            url: "getUid",
+            data: {secId: secId},
+            datatype: "json",
+            success: function (data) {
+                teacherUid = data.teacherUid;
+                room = data.room;
+                studentUid = data.studentUid;
+            }
+        });
+        join(studentUid,teacherUid);
+    });
+
+    //客户端连接其他客户端的主机
+    function join(studentUid,teacherUid) {
+        // document.getElementById("join").disabled = true;
+        document.getElementById("video").disabled = true;
+        //随机生成密钥
+        var channel_key = null;
+        //客户端配置
+        var configClient = {
+            mode: 'live',
+            codec: 'vp8'
+        }
+        //创建客户端对象
+        client = AgoraRTC.createClient(configClient);
+        //客户端初始化
+        client.init("074779f606ad40a6b8fe7ae8bb47b395", function () {
+            console.log("AgoraRTC client initialized");
+            client.join(channel_key,room, studentUid, function () {
+                console.log("User " + studentUid + " join channel successfully");
+                // this.uid=uid;
+
+                sendMess("in");
+
+
+            }, function (err) {
+                console.log("Join channel failed", err);
+            });
+        }, function (err) {
+            console.log("AgoraRTC client init failed", err);
+        });
+        channelKey = "";
+        //回调方法打印错误信息
+        client.on('error', function (err) {
+            console.log("Got error msg:", err.reason);
+            if (err.reason === 'DYNAMIC_KEY_TIMEOUT') {
+                client.renewChannelKey(channelKey, function () {
+                    console.log("Renew channel key successfully");
+                }, function (err) {
+                    console.log("Renew channel key failed: ", err);
+                });
+            }
+        });
+
+        //回调通知，其他客户端的音视频流加入
+        client.on('stream-added', function (evt) {
+            var stream = evt.stream;
+            console.log("New stream added: " + stream.getId());
+            console.log("Subscribe ", stream);
+            client.subscribe(stream, function (err) {
+                console.log("Subscribe stream failed", err);
+            });
+        });
+        //回调通知，已接受远程音视频流
+        client.on('stream-subscribed', function (evt) {
+            var stream = evt.stream;
+            console.log("Subscribe remote stream successfully: ");
+            alert(stream.getId()+" "+teacherUid);
+            alert(stream.getId() === teacherUid)
+            if ($('div#video #agora_remote' + stream.getId()).length === 0 && stream.getId() === teacherUid) {
+                $('div#video').append('<div id="agora_remote' + stream.getId() + '" style="float:left; width:810px;height:607px;display:inline-block;"></div>'
+                    +"<button id='btn"+stream.getId()+"'onclick=\"showFull('agora_remote"+stream.getId()+"')\" >全屏</button>");
+                stream.play('agora_remote' + stream.getId());
+                teacherStream = stream;
+            }
+        });
+        //该回调通知 App 已删除远程音视频流
+        client.on('stream-removed', function (evt) {
+            var stream = evt.stream;
+            stream.stop();
+            $('#agora_remote' + stream.getId()).remove();
+            console.log("Remote stream is removed " + stream.getId());
+        });
+        //该回调通知 App 对方用户已离开频道，即对方调用了
+        client.on('peer-leave', function (evt) {
+            var stream = evt.stream;
+            if (stream) {
+                stream.stop();
+                $('#agora_remote' + stream.getId()).remove();
+                console.log(evt.teacherId + " leaved from this channel");
+            }
+        });
+    }
+
+
+    //学生举手动作，调用apply
+    function apply() {
+        sendMess("apply");
+    }
+    function teacherApply(){
+        camera = videoSource.value;
+        microphone = audioSource.value;
+        //创建本地音视频流
+        localStream = AgoraRTC.createStream({streamID: studentUid, audio: true, cameraId: camera, microphoneId: microphone, video: true, screen: false});
+        // localStream = AgoraRTC.createStream({streamID: studentUid, audio: true, cameraId: camera, microphoneId: microphone, video: false, screen: true, extensionId: 'minllpmhdgpndnkomcoccfekfegnlikg'});
+        localStream.on("accessAllowed", function() {
+            console.log("accessAllowed");
+            sendMess("in");
+        });
+
+        // The user has denied access to the camera and mic.
+        localStream.on("accessDenied", function() {
+            console.log("accessDenied");
+        });
+
+        localStream.init(function() {
+            console.log("getUserMedia successfully");
+
+            client.publish(localStream, function (err) {
+                console.log("Publish local stream error: " + err);
+            });
+
+            client.on('stream-published', function (evt) {
+                console.log("Publish local stream successfully");
+            });
+        }, function (err) {
+            console.log("getUserMedia failed", err);
+        });
+    }
+    //学生取消视频共享
+    function cancel(){
+        console.log("localStream cancel");
+        client.unpublish(localStream, function (err) {
+            console.log("Unpublish local stream failed" + err);
+        });
+        localStream.close();
+    }
+    function cancelSence() {
+        cancel();
+        sendMess("in");
+    }
+    //获取设备
+    function getDevices() {
+        AgoraRTC.getDevices(function (devices) {
+            for (var i = 0; i !== devices.length; ++i) {
+                var device = devices[i];
+                var option = document.createElement('option');
+                option.value = device.deviceId;
+                if (device.kind === 'audioinput') {
+                    option.text = device.label || 'microphone ' + (audioSelect.length + 1);
+                    audioSelect.appendChild(option);
+                } else if (device.kind === 'videoinput') {
+                    option.text = device.label || 'camera ' + (videoSelect.length + 1);
+                    videoSelect.appendChild(option);
+                } else {
+                    console.log('Some other kind of source/device: ', device);
+                }
+            }
+        });
+    }
+    getDevices();
+</script>
+</body>
+<script>
+    function showFull(id){
+        var full=document.getElementById(id);
+        launchIntoFullscreen(full);
+    }
+
+    function delFull() {
+        exitFullscreen();
+    }
+    function launchIntoFullscreen(element) {
+        if(element.requestFullscreen){
+            element.requestFullscreen();
+        }
+        else if(element.mozRequestFullScreen) {
+            element.mozRequestFullScreen();
+        }
+        else if(element.webkitRequestFullscreen) {
+            element.webkitRequestFullscreen();
+        }
+        else if(element.msRequestFullscreen) {
+            element.msRequestFullscreen();
+        }
+    }
+    function exitFullscreen() {
+        if(document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if(document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+        } else if(document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        }
+    }
+</script>
+//利用websocket传输信息
+<script type="text/javascript" th:inline="javascript">
+    /*
+     * 	这部分js将websocket封装起来
+     */
+    //thymeleaf inline 内联用法，表示出类似于EL表达式
+    var username = [[${session.user.username}]];
+    // var uid = [[${session.user.uid}]];
+    // var user = [[${session.user}]]
+    var websocket = null;
+    //判断当前浏览器是否支持WebSocket
+    if ('WebSocket' in window) {
+        websocket = new WebSocket("ws://localhost:8080/websocket");
+        // websocket = new WebSocket("wss://www.qzyembryo.com:8443/embryo/websocket");
+        // websocket = new WebSocket("wss://www.houwheretogo.com:8443/embryo/websocket");
+        // alert("支持");
+    }
+    else {
+        alert('当前浏览器 Not support websocket')
+    }
+
+    //连接成功建立的回调方法
+    websocket.onopen = function () {
+        // alert("WebSocket连接成功");
+        // sendMess("readList");
+    };
+
+    //连接发生错误的回调方法
+    websocket.onerror = function () {
+        alert("WebSocket连接发生错误");
+    };
+
+    //连接关闭的回调方法
+    websocket.onclose = function () {
+        alert("WebSocket连接关闭");
+    };
+
+    //接收到消息的回调方法
+    websocket.onmessage = function (event) {
+        var jsonString = event.data;
+        var messGet = JSON.parse(jsonString);
+        if(messGet!=null){
+            var stu_name = messGet.username;
+            var status = messGet.status;
+            appendMess(stu_name,status);
+        }
+    };
+
+    //发送消息
+    function sendMess(status) {
+        var json ="{'room':'"+room+"','username':'"+username+"', 'status':'"+status+"'}";
+        websocket.send(json);
+    }
+
+
+    //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+    window.onbeforeunload = function () {
+        closeWebSocket();
+    };
+
+    //关闭WebSocket连接
+    function closeWebSocket() {
+        alert("hahah");
+        sendMess("out");
+        websocket.close();
+    }
+
+    function appendMess(stu_name,status){
+        if(status == "teacherApply"){
+            teacherApply();
+        }else if(status=="cancelSence"){
+            cancelSence();
+        }
+    }
+</script>
+
+
+
+<script>
+    /* globals MediaRecorder */
+    // Spec is at http://dvcs.w3.org/hg/dap/raw-file/tip/media-stream-capture/RecordingProposal.html
+
+    var recBtn = document.querySelector('button#rec');
+    var pauseResBtn = document.querySelector('button#pauseRes');
+    var stopBtn = document.querySelector('button#stop');
+
+    // var videoElement = document.querySelector('video');
+    var dataElement = document.querySelector('#data');
+    var downloadLink = document.querySelector('a#downloadLink');
+
+    // videoElement.controls = false;
+
+    var mediaRecorder;
+    var chunks = [];
+    var count = 0;
+
+
+    function onBtnRecordClicked (){
+
+        recBtn.disabled = true;
+        pauseResBtn.disabled = false;
+        stopBtn.disabled = false;
+        console.log('Start recording...');
+        if (typeof MediaRecorder.isTypeSupported == 'function'){
+            /*
+                MediaRecorder.isTypeSupported is a function announced in https://developers.google.com/web/updates/2016/01/mediarecorder and later introduced in the MediaRecorder API spec http://www.w3.org/TR/mediastream-recording/
+            */
+            if (MediaRecorder.isTypeSupported('video/webm;codecs=vp9')) {
+                var options = {mimeType: 'video/webm;codecs=vp9'};
+            } else if (MediaRecorder.isTypeSupported('video/webm;codecs=h264')) {
+                var options = {mimeType: 'video/webm;codecs=h264'};
+            } else  if (MediaRecorder.isTypeSupported('video/webm;codecs=vp8')) {
+                var options = {mimeType: 'video/webm;codecs=vp8'};
+            }
+            console.log('Using '+options.mimeType);
+            mediaRecorder = new MediaRecorder(teacherStream.stream, options);
+        }else{
+            console.log('isTypeSupported is not supported, using default codecs for browser');
+            mediaRecorder = new MediaRecorder(teacherStream.stream);
+        }
+
+        pauseResBtn.textContent = "Pause";
+        mediaRecorder.start(10);
+
+        // videoElement.srcObject = teacherStream.stream;
+        // videoElement.play();
+
+        teacherStream.stream.getTracks().forEach(function(track) {
+            log(track.kind+":"+JSON.stringify(track.getSettings()));
+            console.log(track.getSettings());
+        });
+
+        mediaRecorder.ondataavailable = function(e) {
+            chunks.push(e.data);
+        };
+
+        mediaRecorder.onerror = function(e){
+            log('Error: ' + e);
+            console.log('Error: ', e);
+        };
+
+
+        mediaRecorder.onstart = function(){
+            log('Started & state = ' + mediaRecorder.state);
+        };
+
+        mediaRecorder.onstop = function(){
+            log('Stopped  & state = ' + mediaRecorder.state);
+
+            var blob = new Blob(chunks, {type: "video/webm"});
+            chunks = [];
+
+            var videoURL = window.URL.createObjectURL(blob);
+
+            downloadLink.href = videoURL;
+            // videoElement.src = videoURL;
+            downloadLink.innerHTML = 'Download video file';
+
+            var rand =  Math.floor((Math.random() * 10000000));
+            var name  = "video_"+rand+".webm" ;
+
+            downloadLink.setAttribute( "download", name);
+            downloadLink.setAttribute( "name", name);
+        };
+
+        mediaRecorder.onpause = function(){
+            log('Paused & state = ' + mediaRecorder.state);
+        }
+
+        mediaRecorder.onresume = function(){
+            log('Resumed  & state = ' + mediaRecorder.state);
+        }
+
+        mediaRecorder.onwarning = function(e){
+            log('Warning: ' + e);
+        };
+    }
+
+
+    function onBtnStopClicked(){
+        mediaRecorder.stop();
+        // videoElement.controls = true;
+
+        recBtn.disabled = false;
+        pauseResBtn.disabled = true;
+        stopBtn.disabled = true;
+    }
+
+    function onPauseResumeClicked(){
+        if(pauseResBtn.textContent === "Pause"){
+            log("pause");
+            pauseResBtn.textContent = "Resume";
+            mediaRecorder.pause();
+            stopBtn.disabled = true;
+        }else{
+            log("resume");
+            pauseResBtn.textContent = "Pause";
+            mediaRecorder.resume();
+            stopBtn.disabled = false;
+        }
+        recBtn.disabled = true;
+        pauseResBtn.disabled = false;
+    }
+
+
+    function log(message){
+        dataElement.innerHTML = dataElement.innerHTML+'<br>'+message ;
+    }
+</script>
+<style>
+
+
+    body {
+        font-family: sans-serif;
+        font-weight: 300;
+    }
+
+    a {
+        color: #4183C4;
+        font-weight: 300;
+        text-decoration: none;
+    }
+
+    a:hover {
+        color: #3d85c6;
+        text-decoration: underline;
+    }
+
+    a.twitter-follow-button {
+        display: block;
+        height: 32px;
+    }
+
+    a#viewSource {
+        display: block;
+        margin: 1.3em 0 0 0;
+        border-top: 1px solid #999;
+        padding: 1em 0 0 0;
+    }
+
+    div#links a {
+        display: block;
+        line-height: 1.3em;
+        margin: 0 0 1.5em 0;
+    }
+
+    @media screen and (min-width: 1000px) {
+        /* hack! to detect non-touch devices */
+        div#links a {
+            line-height: 0.8em;
+        }
+    }
+
+    h1 a {
+        font-weight: 300;
+        white-space: nowrap;
+    }
+
+    audio {
+        max-width: 100%;
+    }
+
+    body {
+        font-family: sans-serif;
+        margin: 0;
+        padding: 1em;
+        word-break: break-word;
+    }
+
+    canvas {
+        background-color: #ccc;
+        max-width: 100%;
+        width: 100%;
+    }
+
+    code {
+        font-family: sans-serif;
+        font-weight: 400;
+    }
+
+    div#container {
+        margin: 0 auto 0 auto;
+        max-width:720px;
+        padding: 1em 1.5em 1.3em 1.5em;
+    }
+
+    div#highlight {
+        border: 1px solid #666;
+        font-size: 1.2em;
+        margin: 0 0 50px 0;
+        padding: 0 1em 0 1em;
+    }
+
+    div#links {
+        padding: 0.5em 0 0 0;
+    }
+
+    h1 {
+        border-bottom: 1px solid #ccc;
+        font-family: sans-serif;
+        font-weight: 500;
+        margin: 0 0 0.8em 0;
+        padding: 0 0 0.2em 0;
+    }
+
+    h2 {
+        color: #444;
+        font-size: 1em;
+        font-weight: 500;
+        line-height: 1.2em;
+        margin: 0 0 0.8em 0;
+    }
+
+    h3 {
+        border-top: 1px solid #eee;
+        color: #666;
+        font-size: 0.9em;
+        font-weight: 500;
+        margin: 20px 0 10px 0;
+        padding: 10px 0 0 0;
+        white-space: nowrap;
+    }
+
+    html {
+        /* avoid annoying page width change
+        when moving from the home page */
+        overflow-y: scroll;
+    }
+
+    img {
+        border: none;
+        max-width: 100%;
+    }
+
+    input {
+        font-family: sans-serif;
+    }
+
+    input[type=radio] {
+        position: relative;
+        top: -1px;
+    }
+
+    input[type=radio] {
+        position: relative;
+        top: -1px;
+    }
+
+    ol {
+        padding: 0 0 0 20px;
+    }
+
+    p {
+        color: #444;
+        font-weight: 300;
+        line-height: 1.6em;
+    }
+
+    p#data {
+        border-top: 1px dotted #666;
+        font-family: Courier New, monospace;
+        line-height: 1.3em;
+        max-height: 1000px;
+        overflow-y: auto;
+        padding: 1em 0 0 0;
+    }
+
+    p.borderBelow {
+        border-bottom: 1px solid #eee;
+        padding: 0 0 20px 0;
+    }
+
+    section p:last-of-type {
+        margin: 0;
+    }
+
+    section {
+        border-bottom: 1px solid #eee;
+        margin: 0 0 30px 0;
+        padding: 0 0 20px 0;
+    }
+
+    section:last-of-type {
+        border-bottom: none;
+        padding: 0 0 1em 0;
+    }
+
+    select {
+        margin: 0 1em 1em 0;
+        position: relative;
+        top: -1px;
+    }
+
+    h1 span {
+        white-space: nowrap;
+    }
+
+    strong {
+        font-weight: 500;
+    }
+
+    ul {
+        padding: 0 0 0 20px;
+    }
+
+    section p:last-of-type {
+        margin: 0;
+    }
+
+    section {
+        border-bottom: 1px solid #eee;
+        margin: 0 0 30px 0;
+        padding: 0 0 20px 0;
+    }
+
+    section:last-of-type {
+        border-bottom: none;
+        padding: 0 0 1em 0;
+    }
+
+    select {
+        margin: 0 1em 1em 0;
+        position: relative;
+        top: -1px;
+    }
+
+    h1 span {
+        white-space: nowrap;
+    }
+
+    strong {
+        font-weight: 500;
+    }
+
+    video {
+        background: #222;
+        margin: 10px auto;
+        width: 320px;
+        height:240px;
+    }
+
+    @media screen and (max-width: 650px) {
+        h1 {
+            font-size: 24px;
+        }
+    }
+
+    @media screen and (max-width: 550px) {
+        button:active {
+            background-color: darkRed;
+        }
+        h1 {
+            font-size: 22px;
+        }
+    }
+
+    @media screen and (max-width: 450px) {
+        h1 {
+            font-size: 20px;
+        }
+    }
+
+
+</style>
+</body>
+</html>

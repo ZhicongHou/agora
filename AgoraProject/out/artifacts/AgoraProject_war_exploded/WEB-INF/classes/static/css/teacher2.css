@@ -1,0 +1,272 @@
+
+.myClassDiv{
+    /*border: #01AAED!important;*/
+    /*border:1px solid lightgrey;*/
+    /*width: 1297px!important;*/
+    margin-top: 5px!important;
+}
+
+.screenWith{
+    margin-top: 15px;
+    vertical-align: text-top;
+    position: relative;
+    left: 20px;
+}
+
+.screen{
+    width: 732px;
+    height:412px;
+    border-radius: 3px;
+    box-shadow: darkgrey 0 0 30px 5px;
+    background-color: #364342;
+    overflow:auto;
+}
+
+.studentScreen{
+    width: 210px;
+    height: 140px;
+    margin-left: 26px;
+    margin-top: 14px;
+}
+
+.smallScreen{
+    width: 210px;
+    height: 118px;
+    background-color: #2D93CA;
+    /*margin-left: 26px;*/
+    /*margin-top: 14px;*/
+}
+
+.idInScreen{
+    color:gainsboro!important;
+    width: 100%;
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+}
+
+.roomTab{
+    vertical-align: text-top;
+    position: relative;
+    left: 20px;
+    margin: 0 auto;
+    padding-left: 20px;
+    padding-top: 20px;
+    width: 380px;
+}
+.msgShow{
+    /*word-wrap: break-word;*/
+    padding: 20px;
+    height: 200px;
+    background: lavender;
+    overflow:auto;
+}
+
+.noticeShow{
+    padding-right: 5px;
+    height: 240px;
+    overflow:auto;
+}
+
+.noticeItem{
+    word-break: break-all;
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    background-color: cornsilk;
+}
+
+.sendBtn{
+    float: right;
+}
+
+.input{
+    resize: none;
+}
+
+.fullScreen{
+    height: 30px;
+    width: 30px;
+    position:absolute;
+    /*bottom:0;*/
+    right:0;
+}
+
+.download{
+    padding: 20px;
+    height: 325px;
+    overflow:auto;
+}
+
+.downloadItem{
+    padding-bottom: 10px;
+}
+
+.fileName{
+    width:205px;
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+}
+
+.uploadBtn{
+    margin-top: 10px;
+    margin-left: 185px;
+}
+
+.studentList{
+    height: 411px;
+    /*width: 125px;*/
+    border:1px solid lightgrey;
+    background: lightyellow;
+    overflow:auto;
+}
+
+.noticeOperation{
+    padding-top: 5px;
+    padding-bottom: 10px;
+}
+
+.noticeTime{
+    font-size: small!important;
+    float: left;
+}
+
+.noticeDelete{
+    float: right;
+}
+
+.courseInfo{
+    margin-bottom: 10px;
+}
+
+.title{
+    font-size: 30px;
+    vertical-align: bottom;
+    width: 340px;
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+}
+
+.teacherName{
+    margin-left: 20px;
+    font-size: 15px;
+    color: #666;
+}
+
+.studentItem{
+    /*margin: 15px;*/
+    padding: 15px;
+    /*border:1px solid lightgrey;*/
+}
+
+.student{
+    height: 20px;
+    width: auto;
+    /*vertical-align:top;*/
+}
+
+.studentName{
+    margin-left: 5px;
+    width: 70px;
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+}
+
+.hand{
+    margin-left: 5px;
+    height: 20px;
+    width: auto;
+    /*vertical-align:top;*/
+}
+
+.screen::-webkit-scrollbar {/*滚动条整体样式*/
+    width: 5px;     /*高宽分别对应横竖滚动条的尺寸*/
+    height: 1px;
+}
+.screen::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+    background: grey;
+}
+.screen::-webkit-scrollbar-track {/*滚动条里面轨道*/
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    background: lightgrey;
+}
+
+.studentList2::-webkit-scrollbar {/*滚动条整体样式*/
+    width: 3px;     /*高宽分别对应横竖滚动条的尺寸*/
+    height: 1px;
+}
+.studentList2::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+    background: grey;
+}
+
+.icon{
+    margin-right: 5px;
+}
+
+.bell{
+    height: 20px;
+    width: auto;
+    margin-right: 5px;
+}
+
+.screenIcon{
+    height: 18px;
+    width: auto;
+    margin-right: 5px;
+}
+
+.teacherButtons{
+    /*margin-left: 250px;*/
+    float: right;
+}
+
+.showAllScreens{
+    margin-left: 5px;
+}
+
+.studentList2{
+    position: absolute;
+    z-index: 999;
+    display: none;
+    /*margin-top: 30px;*/
+    border:1px solid lightgrey;
+    box-shadow: darkgrey 0 0 20px 1px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    left: 10px;
+    height: 600px;
+    width: 197px;
+    background: white;
+    overflow:auto;
+}
+
+.applyScreen{
+    /*position: relative;*/
+    /*left: 5px;*/
+    height: 20px;
+    width: auto;
+}
+
+.studentTitle{
+    /*box-sizing: border-box;*/
+    /*background-color: #2D93CA;*/
+    text-align: center;
+    margin: 10px auto;
+}
+
+.studentBadge{
+    margin-left: 5px!important;
+}
+
+.showStudents{
+    position: absolute;
+    z-index: 999;
+    left: 10px;
+    width: 197px;
+}
+.msgItem{
+    width: 100%;
+    word-break: break-all;
+}

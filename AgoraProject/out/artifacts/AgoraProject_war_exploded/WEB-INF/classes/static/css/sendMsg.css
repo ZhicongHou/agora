@@ -1,0 +1,23 @@
+.sendBody{
+    box-sizing: border-box;
+    margin: 30px auto 0;
+    padding: 40px;
+    width: 1000px;
+    height: 330px;
+    /*background-color:white;*/
+    /*box-shadow: darkgrey 0 0 30px 5px;*/
+    border-radius: 3px;
+}
+
+.title{
+    font-size: 30px;
+}
+
+.inputBlock{
+    width: 500px;
+}
+
+.sendBtn{
+    float: right;
+    width: 150px;
+}

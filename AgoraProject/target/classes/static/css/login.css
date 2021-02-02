@@ -1,0 +1,27 @@
+.loginBody{
+    padding: 20px 20px;
+}
+
+.forgetpw{
+    padding-bottom: 10px;
+    font-size: small;
+}
+
+.code{
+    width: 130px!important;
+}
+
+.codeImg{
+    margin-bottom: 12px;
+}
+
+.flush{
+    height: 30px;
+    width: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    display: none;
+}

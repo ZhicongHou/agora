@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>admin</title>
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <script src="/js/jquery.min.js"></script>
+    <link rel="stylesheet" href="/admin2.css">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">agora</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-left" lay-filter="head">
+            <li class="layui-nav-item"><a href="javascript:;" data-url="userAndCourse">用户和课程</a></li>
+            <li class="layui-nav-item"><a href="javascript:;" data-url="authAndGrant">认证和授权</a></li>
+            <li class="layui-nav-item"><a href="javascript:;" data-url="msgAndNotice">消息通知</a></li>
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item"><a href="">admin</a></li>
+            <li class="layui-nav-item"><a href="">退出</a></li>
+        </ul>
+    </div>
+
+    <div class="layui-side layui-bg-black" >
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree user"  lay-filter="user">
+                <li class="layui-nav-item"><a href="javascript:;" data-url="teacher">老师</a></li>
+                <li class="layui-nav-item"><a href="javascript:;" data-url="student">学生</a></li>
+                <li class="layui-nav-item"><a href="javascript:;" data-url="course">课程</a></li>
+            </ul>
+
+            <ul class="layui-nav layui-nav-tree auth"  lay-filter="auth">
+                <li class="layui-nav-item"><a href="javascript:;" data-url="teacherAuth">老师认证</a></li>
+                <li class="layui-nav-item"><a href="javascript:;" data-url="courseAuth">课程授权</a></li>
+            </ul>
+
+        </div>
+    </div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <table class="layui-table teacher">
+                <colgroup>
+                    <col width="20%">
+                    <col width="20%">
+                    <col width="20%">
+                    <col width="40%">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>用户名</th>
+                    <th>电话号码</th>
+                    <th>支付宝账号</th>
+                    <th>简介</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th>bobo</th>
+                    <th>1111</th>
+                    <th>1111</th>
+                    <th>1111</th>
+                </tr>
+                </tbody>
+            </table>
+            <table class="layui-table student" >
+                <colgroup>
+                    <col width="25%">
+                    <col width="25%">
+                    <col width="25%">
+                    <col width="25%">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>用户名</th>
+                    <th>email</th>
+                    <th>真实姓名</th>
+                    <th>创建时间</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th>bobo</th>
+                    <th>1111</th>
+                    <th>1111</th>
+                    <th>1111</th>
+                </tr>
+                </tbody>
+            </table>
+            <table class="layui-table course">
+                <colgroup>
+                    <col width="">
+                    <col width="">
+                    <col width="">
+                    <col width="200px">
+                    <col width="200px">
+                    <col width="200px">
+                    <col width="200px">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>课程名称</th>
+                    <th>任课老师</th>
+                    <th>开课日期</th>
+                    <th>上课时间</th>
+                    <th>课程人数上限</th>
+                    <th>是否支付</th>
+                    <th>设置支付金额的比例</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th>bobo</th>
+                    <th>1111</th>
+                    <th>1111</th>
+                    <th>星期一 14:00:00 16:00:00,星期二 14:00:00 16:00:00</th>
+                    <th>1111</th>
+                    <th><button class="layui-btn layui-btn-danger layui-btn-fluid">支付</button></th>
+                    <th><button class="layui-btn layui-btn-normal layui-btn-fluid">编辑</button></th>
+                </tr>
+                </tbody>
+            </table>
+            <table class="layui-table teacherAuth">
+                <colgroup>
+                    <col width="15%">
+                    <col width="15%">
+                    <col width="15%">
+                    <col width="40%">
+                    <col width="15%">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>用户名</th>
+                    <th>电话号码</th>
+                    <th>支付宝账号</th>
+                    <th>简介</th>
+                    <th>认证</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th>bobo</th>
+                    <th>1111</th>
+                    <th>1111</th>
+                    <th>1111</th>
+                    <th><button class="layui-btn layui-btn-danger layui-btn-fluid">认证</button></th>
+                </tr>
+                </tbody>
+            </table>
+            <table class="layui-table courseAuth">
+                <colgroup>
+                    <col width="">
+                    <col width="">
+                    <col width="">
+                    <col width="200px">
+                    <col width="200px">
+                    <col width="200px">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>课程名称</th>
+                    <th>任课老师</th>
+                    <th>开课日期</th>
+                    <th>上课时间</th>
+                    <th>课程人数上限</th>
+                    <th>是否授权</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th>bobo</th>
+                    <th>1111</th>
+                    <th>1111</th>
+                    <th>星期一 14:00:00 16:00:00,星期二 14:00:00 16:00:00</th>
+                    <th>1111</th>
+                    <th><button class="layui-btn layui-btn-danger layui-btn-fluid">授权</button></th>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+<script src="layui/layui.js"></script>
+<script>
+    //JavaScript代码区域
+    layui.use(['element','layer'], function(){
+        var element = layui.element,
+            layer = layui.layer;
+
+        //监听头部导航栏
+        element.on('nav(head)', function(data){
+            setLeftNav(data.attr("data-url"));
+            element.render("nav");
+        });
+
+        //设置左边导航栏
+        function setLeftNav(dataUrl){
+            $(".layui-table").hide();
+            if(dataUrl === "userAndCourse"){
+                $(".user").fadeIn();
+                $(".auth").hide();
+            }else if(dataUrl === "authAndGrant"){
+                $(".user").hide();
+                $(".auth").fadeIn();
+            }else{
+                $(".user").hide();
+                $(".auth").hide();
+            }
+        }
+        //监听左边导航栏
+        element.on('nav(user)', function(data){
+            // layer.msg(data.attr("data-url"));
+            setContent(data.attr("data-url"));
+        });
+
+        element.on('nav(auth)', function(data){
+            // layer.msg(data.attr("data-url"));
+            setContent(data.attr("data-url"));
+        });
+
+        //设置内容，显示的表格
+        function setContent(dataUrl) {
+            $(".layui-table").hide();
+            $("."+dataUrl).fadeIn();
+        }
+    });
+</script>
+</body>
+</html>

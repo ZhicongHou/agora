@@ -1,0 +1,136 @@
+
+.mainBody{
+    border: #01AAED!important;
+}
+
+.screenWith{
+    margin-top: 20px;
+    vertical-align: text-top;
+}
+
+.screen{
+    width: 732px;
+    height:412px;
+    border-radius: 3px;
+    box-shadow: darkgrey 0 0 30px 5px;
+    background-color: #364342;
+}
+
+.roomTab{
+    vertical-align: text-top;
+    margin: 0 auto;
+    padding-left: 20px;
+    padding-top: 20px;
+    width: 380px;
+}
+
+.msgShow{
+    padding: 20px;
+    height: 200px;
+    background: lavender;
+    overflow:auto;
+
+}
+.noticeShow{
+    padding-right: 5px;
+    height: 413px;
+    /*background: lightcyan;*/
+    overflow:auto;
+}
+
+.noticeItem{
+    word-break: break-all;
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    background-color: cornsilk;
+}
+
+.input{
+    resize: none;
+}
+
+.fullScreen{
+    height: 30px;
+    width: 30px;
+    float: right;
+    /*position:absolute;*/
+    /*bottom:0;*/
+    /*right:0;*/
+}
+
+.recordBtn{
+    height: 30px;
+    width: 30px;
+    margin: 1px;
+    /*float: right;*/
+    right: 0;
+}
+
+.download{
+    padding: 20px;
+    height: 373px;
+    overflow:auto;
+}
+
+.downloadItem{
+    padding-bottom: 10px;
+}
+
+.fileName{
+    width:235px;
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+}
+
+.sendBtn{
+    float: right;
+}
+
+.noticeOperation{
+    padding-top: 5px;
+    padding-bottom: 10px;
+}
+
+.noticeTime{
+    font-size: small!important;
+    float: left;
+}
+
+.courseInfo{
+    margin-bottom: 10px;
+}
+
+.courseName{
+    font-size: 30px;
+}
+
+.teacherName{
+    margin-left: 20px;
+    font-size: 15px;
+    color: #666;
+}
+.btns{
+    /*position: relative;*/
+    /*left: 200px;*/
+    /*right: 0;*/
+    /*bottom: 0;*/
+    float: right;
+    /*margin-bottom: -50px!important;*/
+}
+
+.hand{
+    /*float: right;*/
+    /*padding-bottom: 10px;*/
+    height: 35px;
+    width: auto;
+}
+
+.msgItem{
+    width: 100%;
+    word-break: break-all;
+}
+
+.forbid{
+    display: none!important;
+}

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>history</title>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/layui/layui.js"></script>
+    <script src="/js/history.js"></script>
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <link rel="stylesheet" href="css/history.css">
+</head>
+<body>
+<div class="nav"></div>
+<script>
+    $(".nav").load("/component/navigationBar");
+</script>
+<div class="historyBody">
+    <div class="title">历史记录</div>
+    <hr>
+    <div class="allHistory" >
+        <blockquote class="layui-elem-quote layui-quote-nm">
+            <span class="sender">章金莱</span>
+            <strong> : </strong>
+            <span class="content">什么叫国际巨星啊？（战术后仰</span>
+        </blockquote>
+    </div>
+    <div id="historyPage" style="text-align: center"></div>
+</div>
+
+<!--<script th:inline="javascript">-->
+    <!--init([[${totalElements}]]);-->
+<!--</script>-->
+
+
+</body>
+
+</html>

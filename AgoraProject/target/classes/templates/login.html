@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>login</title>
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <link rel="stylesheet" href="/css/login.css">
+</head>
+<body class="loginBody">
+<form class="layui-form">
+    <div class="layui-form-item">
+        <input type="text" placeholder="用户名" autocomplete="off" name="userName" class="layui-input" lay-verify="required">
+    </div>
+    <div class="layui-form-item">
+        <input type="password" placeholder="密码" autocomplete="off" name="password" class="layui-input" lay-verify="required">
+    </div>
+
+    <div class="layui-form-item code layui-inline">
+        <input type="text" placeholder="验证码" autocomplete="off" name="code" class="layui-input" lay-verify="required">
+    </div>
+    <div  class="codeImg layui-inline">
+        <img class="codeImg2" src="/getVerifyImage" style="" alt="">
+        <a href="javascript:;"><img class="flush" src="/img/flush.png" alt=""></a>
+    </div>
+    <div class="forgetpw"><a href="#" style="color: #00a0d8">忘记密码</a></div>
+    <div class="layui-form-item">
+        <button class="layui-btn layui-btn-fluid loginBtn" lay-filter="login" lay-submit>登录</button>
+    </div>
+    <div>
+        <button class="layui-btn layui-btn-primary layui-btn-fluid regBtn" lay-filter="sign">注册</button>
+    </div>
+</form>
+</body>
+<script src="/layui/layui.js"></script>
+<script src="/js/userFunction/login.js"></script>
+</html>

@@ -1,0 +1,22 @@
+
+.alertBody{
+    text-align: center;
+}
+.screen{
+    position: absolute;
+    left:50%;
+    margin-left: -100px;
+}
+
+.x{
+    position: absolute;
+    left:50%;
+    margin-left: -100px;
+    z-index: 999;
+}
+
+.alertText{
+    margin-top: 50px;
+    color: red;
+    font-size: 50px;
+}

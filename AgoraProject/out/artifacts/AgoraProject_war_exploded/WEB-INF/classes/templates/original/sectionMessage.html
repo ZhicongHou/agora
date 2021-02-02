@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Agora Web Sample</title>
+    <link rel="stylesheet" href="vendor/bootstrap.min.css">
+    <script src="AgoraRTCSDK-2.5.0.js"></script>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <!--<script src="vendor/jquery.js"></script>-->
+</head>
+<tbody>
+已选该课程的学生：
+<ul id="stu_list">
+</ul>
+<script>
+    var studentList;
+    var url = window.location.href;
+    url = url.split("?")[1];
+    var arr = url.split("=");
+    var secId = arr[1];
+    $(document).ready(function () {
+        $.ajax({
+            type: "get",
+            async : false,
+            url: "getSectionStudent",
+            data:  {secId:secId},
+            datatype:"json",
+            success: function (data) {
+                studentList = eval(data); //数组
+                $.each(studentList, function (index, item) {
+                    //循环获取数据
+                    $('#stu_list').append("<li id='"+studentList[index].taskId+"'>"+studentList[index].stuId+"</li>");
+                });
+            }
+        });
+    });
+
+</script>
+</tbody>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<link rel="stylesheet" href="/css/manger.css">
+<head>
+    <meta charset="utf-8"/>
+    <title></title>
+</head>
+<body>
+<div class="box">
+    <h3>管理员</h3>
+<div>
+    <ul id="example1">
+        <li><a href="/readUserOfPage" target="content1">查看</a></li>
+        <li><a href="/getAllTeaAuthen" target="content1">老师认证</a></li>
+        <li><a href="/getAuthorSeciton" target="content1">课程授权</a></li>
+        <li><a href="/sendMsg" target="content1">消息通知</a></li>
+    </ul>
+</div>
+    <iframe name="content1" >
+    </iframe>
+</div>
+<script>
+    var lis=document.querySelectorAll("#example1 li");
+    var len=lis.length;
+    //切换页签样式：遍历li，给li绑定onclick事件
+    for(var i=0;i<len;i++){
+        lis[i].onclick=function(){
+            //切换页签样式↓
+            for(var i=0;i<len;i++){
+                if(lis[i]==this){//判断是否为当前对象
+                    lis[i].style.background="#f90";
+                    lis[i].querySelector("a").style.color="white";
+                }else{
+                    lis[i].style.background="white";
+                    lis[i].querySelector("a").style.color="black";
+                }
+            }
+        }
+    }
+</script>
+</body>
