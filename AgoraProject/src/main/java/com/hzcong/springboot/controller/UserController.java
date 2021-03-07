@@ -19,6 +19,7 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -48,6 +49,9 @@ public class
     @Autowired
     private TeaAuthenService teaAuthenService;
 
+    @Autowired
+    private KafkaTemplate<String,Object> kafkaTemplate;
+
     @ResponseBody
     @RequestMapping(value = "/login",method = RequestMethod.POST)
     public Message login(@RequestParam("userName") String userName, @RequestParam("password") String password,
@@ -70,6 +74,7 @@ public class
             // 捕获密码错误异常
             return new Message("1","密码错误");
         } catch (UnknownAccountException uae) {
+
             // 捕获未知用户名异常
             return new Message("1","用户名不存在");
         } catch (ExcessiveAttemptsException eae) {
@@ -77,6 +82,7 @@ public class
             return new Message("1","出现未知错误");
         }
     }
+
 
 
 
@@ -108,6 +114,8 @@ public class
         }
     }
 
+
+
     @RequestMapping(value = "/activate")
     public ModelAndView activate(@RequestParam("encodeString")String encodeString){
         ModelAndView modelAndView = new ModelAndView("errorPage");
@@ -119,6 +127,10 @@ public class
             }else{
                 userService.updateActived(true, userId);
                 modelAndView.addObject("errorMsg","激活成功");
+
+                // 这里加kafka。生产者。参数设置。一个userId即可
+                // 消费者用个service写。
+                kafkaTemplate.send("sell_registered_mail", userId);
             }
         } else{
             modelAndView.addObject("errorMsg","激活失败，用户不存在");

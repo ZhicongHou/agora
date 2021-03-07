@@ -4,8 +4,17 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
+import org.springframework.cache.annotation.EnableCaching;
+
+/**
+ *redis-server.exe redis.windows.conf
+ * redis-cli.exe -h 127.0.0.1 -p 6379
+ *zkServer
+ * .\bin\windows\kafka-server-start.bat .\config\server.properties
+ */
 
 @SpringBootApplication
+@EnableCaching
 public class SpringbootApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) {

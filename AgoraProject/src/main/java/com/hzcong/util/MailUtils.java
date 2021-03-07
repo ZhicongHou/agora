@@ -1,4 +1,5 @@
 package com.hzcong.util;
+import com.hzcong.data.entities.UserEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Properties;
@@ -27,12 +28,12 @@ public class MailUtils {
     private Properties props;// 系统属性
     private Session mailSession;// 邮件会话对象
     private MimeMessage mimeMsg; // MIME邮件对象
-//    private String smtpHost = "smtp.163.com";
-//    private String sender = "ZhicongHou@163.com";
-//    private String senderPassword = "happynewyear2019";
-    private String smtpHost = "smtp.qq.com";
-    private String sender = "1129743671@qq.com";
-    private String senderPassword = "dnndcivifmmggjac";
+    private String smtpHost = "smtp.163.com";
+    private String sender = "ZhicongHou@163.com";
+    private String senderPassword = "happynewyear2019";
+//    private String smtpHost = "smtp.qq.com";
+//    private String sender = "1129743671@qq.com";
+//    private String senderPassword = "dnndcivifmmggjac";
 
     public MailUtils(){
         Auth au = new Auth(sender, senderPassword);
@@ -64,6 +65,19 @@ public class MailUtils {
                 "</head>\n" +
                 "<body>\n" +
                 "链接："+"<a href='https://noi.uutime.cn/activate?encodeString="+encodeString+"'>激活用户</a>\n"+
+                "</body>\n" +
+                "</html>";
+        return sendingMimeMail(receiver,"重置密码",body);
+    }
+
+    public boolean  sendSuccessfullyRegisteredMail(String receiver, String userName){
+        String body = "<!DOCTYPE html>\n" +
+                "<head>\n" +
+                "    <meta charset=\"UTF-8\">\n" +
+                "    <title>激活用户成功</title>\n" +
+                "</head>\n" +
+                "<body>\n" +
+                "成功注册，您的用户名为："+userName+"激活用户</a>\n"+
                 "</body>\n" +
                 "</html>";
         return sendingMimeMail(receiver,"重置密码",body);

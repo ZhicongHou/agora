@@ -1,11 +1,12 @@
 package com.hzcong.data.entities;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name = "permission")
-public class PermissionEntity {
+public class PermissionEntity  implements Serializable {
     private String id;
     private String name;
     private String sign;

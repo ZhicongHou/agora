@@ -3,13 +3,14 @@ package com.hzcong.data.entities;
 import com.hzcong.util.Util;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Set;
 
 @Entity
 @Table(name = "user")
-public class UserEntity {
+public class UserEntity  implements Serializable {
     private String id;
     private String email;
     private String userName;

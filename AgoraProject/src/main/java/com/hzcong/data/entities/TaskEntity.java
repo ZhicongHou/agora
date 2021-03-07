@@ -1,11 +1,12 @@
 package com.hzcong.data.entities;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Date;
 
 @Entity
 @Table(name = "task")
-public class TaskEntity {
+public class TaskEntity  implements Serializable {
     private String taskId;
     private String stuId;
     private String secId;

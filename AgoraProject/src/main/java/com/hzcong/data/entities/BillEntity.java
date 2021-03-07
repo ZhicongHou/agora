@@ -1,11 +1,12 @@
 package com.hzcong.data.entities;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "bill")
-public class BillEntity {
+public class BillEntity  implements Serializable {
     private String billId;
     private String outBizNo;
     private String userId;

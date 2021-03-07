@@ -1,10 +1,11 @@
 package com.hzcong.data.entities;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "course")
-public class CourseEntity {
+public class CourseEntity  implements Serializable {
     private String id;
     private String title;
 

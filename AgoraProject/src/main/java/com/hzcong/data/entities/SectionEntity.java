@@ -1,11 +1,12 @@
 package com.hzcong.data.entities;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Date;
 
 @Entity
 @Table(name = "section")
-public class SectionEntity {
+public class SectionEntity implements Serializable {
     private String secId;
     private String courId;
     private String teaId;

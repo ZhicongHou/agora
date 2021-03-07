@@ -98,6 +98,7 @@ public class    ForgetPasswordCotroller {
         return mv;
     }
 
+
     @ResponseBody
     @RequestMapping(value = "/executeChangePassword",method = RequestMethod.POST)
     public Message executeChangePassword(@RequestParam( "encodeString" ) String encodeString,

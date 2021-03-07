@@ -1,10 +1,11 @@
 package com.hzcong.data.entities;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "message")
-public class MessageEntity {
+public class MessageEntity  implements Serializable {
     private String id;
     private String content;
     private String senderId;

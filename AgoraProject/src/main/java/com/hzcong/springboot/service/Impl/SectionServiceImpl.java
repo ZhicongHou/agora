@@ -5,6 +5,9 @@ import com.hzcong.data.entities.SectionEntity;
 import com.hzcong.springboot.repository.SectionRepository;
 import com.hzcong.springboot.service.SectionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,27 +20,39 @@ public class SectionServiceImpl implements SectionService {
     @Autowired
     private SectionRepository sectionRepository;
 
-    @Transactional
+//    @Transactional
+    @Cacheable(value = "section",key = "#id", unless="#result == null")
     public SectionEntity getSectionById(String id){
+        System.out.println("进入getSectionById");
+        System.out.println(id);
         return  sectionRepository.findOne(id);
     }
 
     @Transactional
+    @CachePut(value = "section",key = "#section.secId", unless="#result == null")
+    public boolean addSection(SectionEntity section){
+        return sectionRepository.save(section)!=null;
+    }
+
+    @Transactional
+    @CacheEvict(value = "section",key = "#secId", beforeInvocation = true)
+    public boolean deleteSectionById(String secId){
+        return sectionRepository.deleteSectionEntityBySecId(secId)!=0;
+    }
+
+
+    //    @Transactional
     public Iterable<SectionEntity> getTeacherSectionsByTeaId(String teaId){
         return sectionRepository.getSectionEntitiesByTeaId(teaId);
     }
 
 
-
-    @Transactional
+//    @Transactional
     public Iterable<SectionEntity> getAllSections(){
         return sectionRepository.findAll();
     }
 
-    @Transactional
-    public boolean addSection(SectionEntity section){
-        return sectionRepository.save(section)!=null;
-    }
+
 
     @Transactional
     public boolean authorizeSection(String secId){
@@ -49,10 +64,6 @@ public class SectionServiceImpl implements SectionService {
         return sectionRepository.updatePurchasedBySecId(secId, purchased)!=0;
     }
 
-    @Transactional
-    public boolean deleteSectionById(String secId){
-        return sectionRepository.deleteSectionEntityBySecId(secId)!=0;
-    }
 
     @Transactional
     public boolean updatePaidBySecId(String secId, boolean paid) {
@@ -73,6 +84,7 @@ public class SectionServiceImpl implements SectionService {
 
     @Override
     public Page<SectionEntity> getAllAuthorizedSectionOfPage(int pageNum, int pageSize) {
+        System.out.println("进入获取列表的地方");
         Pageable pageable = new PageRequest(pageNum,pageSize);
         return sectionRepository.getAllAuthorizedSctionOfPage(pageable);
     }
